@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "BaseState.h"
-#include "TestState.h"
+#include "MainMenuState.h"
 #include <memory>
 #include <vector>
 
@@ -23,6 +23,8 @@ public:
 
     template <typename T, typename... Args>
     void changeState(Args&&... args);
+
+    const sf::RenderWindow& getWindow() const;
 private:
     void handleEvent();
     void tryPopState();

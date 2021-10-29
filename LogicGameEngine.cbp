@@ -17,6 +17,8 @@
 					<Add directory="include/LogicalComponents" />
 					<Add directory="src/States" />
 					<Add directory="src/ResourceManager" />
+					<Add directory="src/GUI" />
+					<Add directory="src/GUI/Buttons" />
 				</Compiler>
 				<Linker>
 					<Add library="sfml-graphics-d" />
@@ -37,6 +39,8 @@
 					<Add directory="include/LogicalComponents" />
 					<Add directory="src/States" />
 					<Add directory="src/ResourceManager" />
+					<Add directory="src/GUI" />
+					<Add directory="src/GUI/Buttons" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -68,14 +72,19 @@
 		<Unit filename="sfml-system-d-2.dll" />
 		<Unit filename="sfml-window-2.dll" />
 		<Unit filename="sfml-window-d-2.dll" />
+		<Unit filename="src/GUI/Button.cpp" />
+		<Unit filename="src/GUI/Button.h" />
+		<Unit filename="src/GUI/Buttons/RelativeButton.cpp" />
+		<Unit filename="src/GUI/Buttons/RelativeButton.h" />
+		<Unit filename="src/GUI/Widget.h" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Game.h" />
 		<Unit filename="src/ResourceManager/ResourceHolder.cpp" />
 		<Unit filename="src/ResourceManager/ResourceHolder.h" />
 		<Unit filename="src/ResourceManager/ResourceManager.h" />
 		<Unit filename="src/States/BaseState.h" />
-		<Unit filename="src/States/TestState.cpp" />
-		<Unit filename="src/States/TestState.h" />
+		<Unit filename="src/States/MainMenuState.cpp" />
+		<Unit filename="src/States/MainMenuState.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
