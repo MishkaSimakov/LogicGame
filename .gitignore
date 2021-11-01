@@ -1,4 +1,6 @@
 bin/
 obj/
+.idea/
+cmake-build-debug/
 LogicGameEngine.layout
 LogicGameEngine.depend

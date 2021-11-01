@@ -4,7 +4,7 @@ MainMenuState::MainMenuState(Game &game) :
     BaseState(game), m_play_button({0.5, 0.5}, {0.25, 0.1}, "Start", game.getWindow())
 {
     m_play_button.setCallback([&game]() {
-        game.exitGame();
+        game.changeState<LevelState>(game);
     });
 }
 

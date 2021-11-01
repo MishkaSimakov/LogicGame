@@ -88,7 +88,7 @@ void Game::handleEvent()
 
 BaseState &Game::getCurrentState()
 {
-    return *m_states.back();
+    return *m_states[0];
 }
 
 void Game::pushState(std::unique_ptr<BaseState> state)

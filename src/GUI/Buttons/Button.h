@@ -4,6 +4,7 @@
 #include "Widget.h"
 #include "ResourceHolder.h"
 #include <functional>
+#include "Colors.h"
 
 namespace gui
 {
