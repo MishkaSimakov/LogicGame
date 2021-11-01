@@ -3,7 +3,15 @@ project(LogicGameEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(src src/States src/ResourceManager src/GUI src/GUI/Buttons src/GUI/LogicalComponents)
+include_directories(
+        src
+        src/States
+        src/ResourceManager
+        src/GUI
+        src/GUI/Buttons
+        src/GUI/LogicalComponents
+        src/GUI/LevelComponents
+)
 
 add_executable(LogicGameEngine
         main.cpp
@@ -15,7 +23,7 @@ add_executable(LogicGameEngine
         src/ResourceManager/ResourceHolder.cpp
         src/States/LevelState.cpp
         src/States/MainMenuState.cpp
-        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h)
+        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h)
 
 # include SFML
 set(SFML_ROOT D:/Programs/CLionProjects/Libraries/SFML-debug/)
@@ -24,7 +32,7 @@ find_package(SFML 2.5.1 REQUIRED system window graphics)
 
 target_link_libraries(LogicGameEngine ${SFML_LIBRARIES})
 
-target_include_directories(LogicGameEngine PRIVATE ${SFML_INCLUDE_DIR})
+include_directories(${SFML_INCLUDE_DIR})
 
 # Copy dlls to build
 file(GLOB BINARY_DEP_DLLS "${SFML_INCLUDE_DIR}/../lib/*.dll")

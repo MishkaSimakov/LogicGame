@@ -1,11 +1,10 @@
 #ifndef LEVELSTATE_H
 #define LEVELSTATE_H
 
+#include "DocumentationBlock.h"
 #include "BaseState.h"
 #include "ResourceHolder.h"
-#include "Colors.h"
 #include <functional>
-#include "RoundedRectangle.h"
 #include "Game.h"
 #include <vector>
 #include "StaticLogicalComponent.h"
@@ -25,8 +24,7 @@ public:
 
     virtual void render(sf::RenderTarget &renderer);
 private:
-    sf::Text m_text;
-    gui::RoundedRectangle m_r_rect;
+    gui::DocumentationBlock m_documentation_block;
 
     std::vector<gui::ActingLogicalComponent> m_acting_logical_components;
     std::vector<gui::StaticLogicalComponent> m_static_logical_components;

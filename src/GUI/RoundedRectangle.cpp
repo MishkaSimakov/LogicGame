@@ -1,5 +1,4 @@
 #include "RoundedRectangle.h"
-#include <iostream>
 
 namespace gui
 {

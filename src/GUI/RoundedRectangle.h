@@ -10,7 +10,6 @@ namespace gui
 class RoundedRectangle : public Widget
 {
 public:
-    // для закругления конкретных углов
     const static unsigned char TOP_LEFT = 1;
     const static unsigned char TOP_RIGHT = 2;
     const static unsigned char BOTTOM_RIGHT = 4;
@@ -18,7 +17,7 @@ public:
     const static unsigned char ALL = 15;
 
     RoundedRectangle(
-        const sf::Vector2f &posision,
+        const sf::Vector2f &position,
         const sf::Vector2f &rect_size,
         float radius,
         const sf::Color &color,
