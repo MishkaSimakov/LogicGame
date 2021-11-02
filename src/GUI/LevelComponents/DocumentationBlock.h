@@ -6,6 +6,7 @@
 #include "RoundedRectangle.h"
 #include "Colors.h"
 #include "WrappingText.h"
+#include "Button.h"
 
 namespace gui {
     class DocumentationBlock : public Widget {
@@ -18,9 +19,9 @@ namespace gui {
     private:
         RoundedRectangle m_background;
         WrappingText m_title;
-        sf::Text m_description;
+        WrappingText m_description;
 
-        int m_width;
+        Button m_hide_button;
     };
 }
 

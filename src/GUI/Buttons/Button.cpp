@@ -12,10 +12,10 @@ namespace gui {
         m_text.setStyle(sf::Text::Bold);
     }
 
-    Button::Button(const sf::Vector2f &posision, const sf::Vector2f &button_size, const std::string &text) :
+    Button::Button(const sf::Vector2f &position, const sf::Vector2f &button_size, const std::string &text) :
             Button() {
         setSize(button_size);
-        setPosition(posision);
+        setPosition(position);
         setText(text);
     }
 
@@ -35,6 +35,10 @@ namespace gui {
                 m_button.setFillColor(gui::colors::primary);
             }
         }
+    }
+
+    void Button::setTexture(const sf::Texture &texture) {
+        m_button.setTexture(&texture);
     }
 
     void Button::render(sf::RenderTarget &renderer) {
@@ -60,7 +64,7 @@ namespace gui {
     }
 
     void Button::setCallback(std::function<void(void)> callback) {
-        m_callback = callback;
+        m_callback = std::move(callback);
     }
 
     void Button::updateText() {

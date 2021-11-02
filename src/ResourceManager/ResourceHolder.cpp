@@ -2,7 +2,7 @@
 
 ResourceHolder::ResourceHolder() :
     fonts("fonts", "ttf"),
-    textures("txrs", "png")
+    textures("textures", "png")
 {}
 
 ResourceHolder &ResourceHolder::get()

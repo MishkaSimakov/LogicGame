@@ -6,30 +6,35 @@
 #include <functional>
 #include "Colors.h"
 
-namespace gui
-{
-class Button : public Widget
-{
-public:
-    Button();
-    Button(const sf::Vector2f &posision, const sf::Vector2f &button_size, const std::string &text);
+namespace gui {
+    class Button : public Widget {
+    public:
+        Button();
 
-    virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
-    virtual void render(sf::RenderTarget &renderer);
+        Button(const sf::Vector2f &position, const sf::Vector2f &button_size, const std::string &text = "");
 
-    void setPosition(const sf::Vector2f &pos);
-    void setSize(const sf::Vector2f &button_size);
+        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
 
-    void setText(const std::string &text);
+        virtual void render(sf::RenderTarget &renderer);
 
-    void setCallback(std::function<void(void)> callback);
-protected:
-    void updateText();
-    std::function<void(void)> m_callback = []() {};
+        void setPosition(const sf::Vector2f &pos);
 
-    sf::RectangleShape m_button;
-    sf::Text m_text;
-};
+        void setSize(const sf::Vector2f &button_size);
+
+        void setTexture(const sf::Texture &texture);
+
+        void setText(const std::string &text);
+
+        void setCallback(std::function<void(void)> callback);
+
+    protected:
+        void updateText();
+
+        std::function<void(void)> m_callback = []() {};
+
+        sf::RectangleShape m_button;
+        sf::Text m_text;
+    };
 }
 
 #endif // BUTTON_H

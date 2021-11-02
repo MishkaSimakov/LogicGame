@@ -10,9 +10,10 @@
 namespace gui {
     class WrappingText : public Widget {
     public:
-        WrappingText(sf::Vector2f position, float max_width, std::string content, int font_size = 20, const std::string &font_name = "arial");
-
-        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
+        WrappingText(
+                sf::Vector2f position, float max_width, std::string content,
+                int font_size = 20, const std::string &font_name = "arial"
+        );
 
         virtual void render(sf::RenderTarget &renderer);
 
@@ -24,7 +25,6 @@ namespace gui {
         std::string m_content;
         int m_font_size;
         float m_max_width;
-        sf::Vector2f m_position;
     };
 }
 

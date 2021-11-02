@@ -18,10 +18,6 @@ namespace gui {
         m_text.setPosition(position);
     }
 
-    void WrappingText::handleEvent(sf::Event e, const sf::RenderWindow &window) {
-
-    }
-
     void WrappingText::render(sf::RenderTarget &renderer) {
         renderer.draw(m_text);
     }
