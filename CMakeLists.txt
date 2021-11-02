@@ -23,7 +23,7 @@ add_executable(LogicGameEngine
         src/ResourceManager/ResourceHolder.cpp
         src/States/LevelState.cpp
         src/States/MainMenuState.cpp
-        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h)
+        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h)
 
 # include SFML
 set(SFML_ROOT D:/Programs/CLionProjects/Libraries/SFML-debug/)
