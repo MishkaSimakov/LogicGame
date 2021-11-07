@@ -1,9 +1,8 @@
 #ifndef LOGICGAMEENGINE_WRAPPINGTEXT_H
 #define LOGICGAMEENGINE_WRAPPINGTEXT_H
 
-#include <string>
 #include "Widget.h"
-#include "SFML/Graphics.hpp"
+#include <string>
 #include "ResourceHolder.h"
 #include "Colors.h"
 

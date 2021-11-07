@@ -7,88 +7,76 @@ namespace gui {
             float radius,
             const sf::Color &color,
             unsigned char corners_to_round,
-            float outline,
+            float outline_thickness,
             const sf::Color &outline_color,
             int points
-    ) :
-            m_position(position),
-            m_size(rect_size),
-            m_radius(radius),
-            m_color(color),
-            m_corners_to_round(corners_to_round),
-            m_outline(outline),
-            m_outline_color(outline_color),
-            m_points(points) {
-        generateShape();
-    }
+    ) {
+        m_shape.setFillColor(color);
 
-    void RoundedRectangle::generateShape() {
-        m_shape.setFillColor(m_color);
+        m_shape.setOutlineThickness(outline_thickness);
+        m_shape.setOutlineColor(outline_color);
 
-        m_shape.setOutlineThickness(m_outline);
-        m_shape.setOutlineColor(m_outline_color);
-
-        int points_count = (m_corners_to_round & TOP_LEFT ? m_points : 1) +
-                           (m_corners_to_round & TOP_RIGHT ? m_points : 1) +
-                           (m_corners_to_round & BOTTOM_RIGHT ? m_points : 1) +
-                           (m_corners_to_round & BOTTOM_LEFT ? m_points : 1);
+        int points_count = (corners_to_round & TOP_LEFT ? points : 1) +
+                           (corners_to_round & TOP_RIGHT ? points : 1) +
+                           (corners_to_round & BOTTOM_RIGHT ? points : 1) +
+                           (corners_to_round & BOTTOM_LEFT ? points : 1);
 
         m_shape.setPointCount(points_count);
 
-        float x = 0, y = 0;
+        float x = 0, y;
         int i, point_id = 0;
 
-        if (m_corners_to_round & TOP_RIGHT) {
-            for (i = 0; i < m_points; ++i) {
-                x += m_radius / m_points;
-                y = std::sqrt(m_radius * m_radius - x * x);
+        if (corners_to_round & TOP_RIGHT) {
+            for (i = 0; i < points; ++i) {
+                x += radius / (float) points;
+                y = std::sqrt(radius * radius - x * x);
                 m_shape.setPoint(point_id,
-                                 sf::Vector2f(x + m_position.x + m_size.x - m_radius, m_position.y - y + m_radius));
+                                 sf::Vector2f(x + position.x + rect_size.x - radius, position.y - y + radius));
                 ++point_id;
             }
         } else {
-            m_shape.setPoint(point_id, sf::Vector2f(m_position.x + m_size.x, m_position.y));
+            m_shape.setPoint(point_id, sf::Vector2f(position.x + rect_size.x, position.y));
             ++point_id;
         }
 
-        if (m_corners_to_round & BOTTOM_RIGHT) {
+        if (corners_to_round & BOTTOM_RIGHT) {
             y = 0;
-            for (i = 0; i < m_points; ++i) {
-                y += m_radius / m_points;
-                x = std::sqrt(m_radius * m_radius - y * y);
-                m_shape.setPoint(point_id, sf::Vector2f(m_position.x + m_size.x + x - m_radius,
-                                                        m_position.y + m_size.y - m_radius + y));
+            for (i = 0; i < points; ++i) {
+                y += radius / (float) points;
+                x = std::sqrt(radius * radius - y * y);
+                m_shape.setPoint(point_id, sf::Vector2f(position.x + rect_size.x + x - radius,
+                                                        position.y + rect_size.y - radius + y));
                 ++point_id;
             }
         } else {
-            m_shape.setPoint(point_id, sf::Vector2f(m_position.x + m_size.x, m_position.y + m_size.y));
+            m_shape.setPoint(point_id, sf::Vector2f(position.x + rect_size.x, position.y + rect_size.y));
             ++point_id;
         }
 
-        if (m_corners_to_round & BOTTOM_LEFT) {
+        if (corners_to_round & BOTTOM_LEFT) {
             x = 0;
-            for (i = 0; i < m_points; ++i) {
-                x += m_radius / m_points;
-                y = std::sqrt(m_radius * m_radius - x * x);
+            for (i = 0; i < points; ++i) {
+                x += radius / (float) points;
+                y = std::sqrt(radius * radius - x * x);
                 m_shape.setPoint(point_id,
-                                 sf::Vector2f(m_position.x + m_radius - x, m_position.y + m_size.y - m_radius + y));
+                                 sf::Vector2f(position.x + radius - x, position.y + rect_size.y - radius + y));
                 ++point_id;
             }
         } else {
-            m_shape.setPoint(point_id, sf::Vector2f(m_position.x, m_position.y + m_size.y));
+            m_shape.setPoint(point_id, sf::Vector2f(position.x, position.y + rect_size.y));
             ++point_id;
         }
 
-        if (m_corners_to_round & TOP_LEFT) {
+        if (corners_to_round & TOP_LEFT) {
             y = 0;
-            for (i = 0; i < m_points; ++i) {
-                y += m_radius / m_points;
-                x = std::sqrt(m_radius * m_radius - y * y);
-                m_shape.setPoint(point_id, sf::Vector2f(m_position.x - x + m_radius, m_position.y + m_radius - y));
+            for (i = 0; i < points; ++i) {
+                y += radius / (float) points;
+                x = std::sqrt(radius * radius - y * y);
+                m_shape.setPoint(point_id, sf::Vector2f(position.x - x + radius, position.y + radius - y));
                 ++point_id;
             }
         } else {
-            m_shape.setPoint(point_id, sf::Vector2f(m_position.x, m_position.y));
+            m_shape.setPoint(point_id, sf::Vector2f(position.x, position.y));
             ++point_id;
         }
     }

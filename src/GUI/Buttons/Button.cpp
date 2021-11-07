@@ -1,77 +1,106 @@
 #include "Button.h"
 
 namespace gui {
-    Button::Button() {
-        m_button.setOutlineThickness(2);
-        m_button.setOutlineColor(gui::colors::dark_primary);
-        m_button.setFillColor(gui::colors::primary);
+    Button::Button(
+            const sf::Vector2f &position,
+            const sf::Vector2f &button_size,
+            const std::string &text,
+            const sf::Color &text_color,
+            const std::string &font,
+            unsigned int font_size,
+            const sf::Color &color,
+            float outline_thickness,
+            const sf::Color &outline_color,
+            const sf::Color &hover_color,
+            const sf::Color &active_color
+    ) :
+            m_background_color(color),
+            m_hover_background_color(hover_color),
+            m_active_background_color(active_color) {
+        // button background
+        m_background.setPosition(position);
+        m_background.setSize(button_size);
 
-        m_text.setFont(ResourceHolder::get().fonts.get("arial"));
-        m_text.setCharacterSize(30);
-        m_text.setFillColor(gui::colors::white);
+        updateColor(NORMAL); // set background fill color
+
+        m_background.setOutlineThickness(outline_thickness);
+        m_background.setOutlineColor(outline_color);
+
+        // button text
+        m_text.setString(text);
+        m_text.setFont(ResourceHolder::get().fonts.get(font));
+        m_text.setCharacterSize(font_size);
+        m_text.setFillColor(text_color);
         m_text.setStyle(sf::Text::Bold);
-    }
 
-    Button::Button(const sf::Vector2f &position, const sf::Vector2f &button_size, const std::string &text) :
-            Button() {
-        setSize(button_size);
-        setPosition(position);
-        setText(text);
+        updateTextPosition();
     }
 
     void Button::handleEvent(sf::Event e, const sf::RenderWindow &window) {
-        if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+        if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::MouseMoved) {
             auto pos = sf::Mouse::getPosition(window);
 
-            if (m_button.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
-                m_callback();
-            }
-        } else if (e.type == sf::Event::MouseMoved) {
-            auto pos = sf::Mouse::getPosition(window);
+            // cursor over button
+            if (m_background.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
+                if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
+                    // click
+                    m_callback();
 
-            if (m_button.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
-                m_button.setFillColor(gui::colors::dark_primary);
-            } else {
-                m_button.setFillColor(gui::colors::primary);
+                    updateColor(NORMAL);
+                } else if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+                    // active
+                    updateColor(ACTIVE);
+                } else {
+                    // hover
+                    updateColor(HOVER);
+                }
+
+                return;
             }
+
+            // cursor somewhere else
+            updateColor(NORMAL);
         }
     }
 
     void Button::setTexture(const sf::Texture &texture) {
-        m_button.setTexture(&texture);
+        m_has_texture = true;
+
+        m_background.setFillColor(sf::Color::Transparent);
+        m_background.setTexture(&texture);
+
+        updateColor(NORMAL);
     }
 
     void Button::render(sf::RenderTarget &renderer) {
-        renderer.draw(m_button);
+        renderer.draw(m_background);
         renderer.draw(m_text);
-    }
-
-    void Button::setPosition(const sf::Vector2f &pos) {
-        m_button.setPosition(pos);
-        m_text.setPosition(pos);
-
-        updateText();
-    }
-
-    void Button::setSize(const sf::Vector2f &button_size) {
-        m_button.setSize(button_size);
-        updateText();
-    }
-
-    void Button::setText(const std::string &text) {
-        m_text.setString(text);
-        updateText();
     }
 
     void Button::setCallback(std::function<void(void)> callback) {
         m_callback = std::move(callback);
     }
 
-    void Button::updateText() {
+    void Button::updateTextPosition() {
         m_text.setOrigin(m_text.getGlobalBounds().width / 2,
                          m_text.getGlobalBounds().height / 2);
 
-        m_text.setPosition(m_button.getPosition().x + m_button.getGlobalBounds().width / 2.0f,
-                           m_button.getPosition().y + m_button.getGlobalBounds().height / 2.0f);
+        m_text.setPosition(m_background.getPosition().x + m_background.getGlobalBounds().width / 2.0f,
+                           m_background.getPosition().y + m_background.getGlobalBounds().height / 2.0f);
+    }
+
+    void Button::updateColor(unsigned int state) {
+        if (m_has_texture) {
+            m_background.setFillColor(sf::Color::White);
+            return;
+        }
+
+        if (state == NORMAL) {
+            m_background.setFillColor(m_background_color);
+        } else if (state == HOVER) {
+            m_background.setFillColor(m_hover_background_color);
+        } else { // ACTIVE state
+            m_background.setFillColor(m_active_background_color);
+        }
     }
 }

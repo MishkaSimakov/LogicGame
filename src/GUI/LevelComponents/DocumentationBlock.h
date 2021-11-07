@@ -22,6 +22,9 @@ namespace gui {
         WrappingText m_description;
 
         Button m_hide_button;
+        Button m_show_button;
+
+        bool m_is_opened = true;
     };
 }
 

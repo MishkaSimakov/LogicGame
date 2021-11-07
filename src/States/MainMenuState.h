@@ -2,7 +2,7 @@
 #define MAINMENUSTATE_H
 
 #include "BaseState.h"
-#include "RelativeButton.h"
+#include "Button.h"
 #include "Game.h"
 #include "LevelState.h"
 
@@ -19,7 +19,7 @@ public:
 
     virtual void render(sf::RenderTarget &renderer);
 private:
-    gui::RelativeButton m_play_button;
+    gui::Button m_play_button;
 };
 
 #endif // MAINMENUSTATE_H

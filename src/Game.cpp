@@ -1,20 +1,17 @@
 #include "Game.h"
 
-Game::Game() : m_window({1280, 720}, "Logic game")
-{
+Game::Game() : m_window({1280, 720}, "Logic game") {
     m_window.setPosition({m_window.getPosition().x, 0});
     m_window.setFramerateLimit(60);
     pushState<MainMenuState>(*this);
 }
 
-void Game::run()
-{
+void Game::run() {
     sf::Clock timer;
 
     auto lastTime = sf::Time::Zero;
 
-    while (m_window.isOpen() && !m_states.empty())
-    {
+    while (m_window.isOpen() && !m_states.empty()) {
         BaseState &state = getCurrentState();
 
         // calculate time
@@ -25,8 +22,6 @@ void Game::run()
         // real time update
         state.handleInput();
         state.update(elapsed);
-
-
 
         // render
         m_window.clear();
@@ -39,8 +34,7 @@ void Game::run()
     }
 }
 
-void Game::tryPopState()
-{
+void Game::tryPopState() {
     if (m_shouldPopState) {
         m_shouldPopState = false;
 
@@ -58,23 +52,19 @@ void Game::tryPopState()
     }
 }
 
-void Game::popState()
-{
+void Game::popState() {
     m_shouldPopState = true;
 }
 
-void Game::exitGame()
-{
+void Game::exitGame() {
     m_shouldPopState = true;
     m_shouldExit = true;
 }
 
-void Game::handleEvent()
-{
+void Game::handleEvent() {
     sf::Event e;
 
-    while (m_window.pollEvent(e))
-    {
+    while (m_window.pollEvent(e)) {
         getCurrentState().handleEvent(e);
 
         if (e.type == sf::Event::Closed) {
@@ -86,17 +76,14 @@ void Game::handleEvent()
     }
 }
 
-BaseState &Game::getCurrentState()
-{
+BaseState &Game::getCurrentState() {
     return *m_states[0];
 }
 
-void Game::pushState(std::unique_ptr<BaseState> state)
-{
+void Game::pushState(std::unique_ptr<BaseState> state) {
     m_states.push_back(std::move(state));
 }
 
-const sf::RenderWindow& Game::getWindow() const
-{
+const sf::RenderWindow &Game::getWindow() const {
     return m_window;
 }

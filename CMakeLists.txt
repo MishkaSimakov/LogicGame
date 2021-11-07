@@ -17,13 +17,12 @@ add_executable(LogicGameEngine
         main.cpp
         src/Game.cpp
         src/GUI/Buttons/Button.cpp
-        src/GUI/Buttons/RelativeButton.cpp
         src/GUI/RoundedRectangle.cpp
         src/GUI/LogicalComponents/StaticLogicalComponent.cpp
         src/ResourceManager/ResourceHolder.cpp
         src/States/LevelState.cpp
         src/States/MainMenuState.cpp
-        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h)
+        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h src/GUI/LogicalComponents/Wire.cpp src/GUI/LogicalComponents/Wire.h src/GUI/LogicalComponents/Input.cpp src/GUI/LogicalComponents/Input.h)
 
 # include SFML
 set(SFML_ROOT D:/Programs/CLionProjects/Libraries/SFML-debug/)
