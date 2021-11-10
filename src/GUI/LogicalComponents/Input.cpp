@@ -18,7 +18,13 @@ namespace gui {
     }
 
     void Input::handleEvent(sf::Event e, const sf::RenderWindow &window) {
-        //
+        if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2f pos(sf::Mouse::getPosition(window));
+
+            if (m_shape.getGlobalBounds().contains(pos)) {
+                is_dragged = true;
+            }
+        }
     }
 
     void Input::redraw(ActingLogicalComponent *component) {

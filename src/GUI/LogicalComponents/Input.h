@@ -26,6 +26,7 @@ namespace gui {
         int m_id;
 
         sf::CircleShape m_shape;
+        bool is_dragged;
     };
 }
 

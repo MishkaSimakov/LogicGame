@@ -2,13 +2,10 @@
 #define LEVELSTATE_H
 
 #include "DocumentationBlock.h"
+#include "Simulation.h"
 #include "BaseState.h"
 #include "ResourceHolder.h"
-#include <functional>
 #include "Game.h"
-#include <vector>
-#include "StaticLogicalComponent.h"
-#include "ActingLogicalComponent.h"
 
 
 class LevelState : public BaseState
@@ -25,6 +22,7 @@ public:
     virtual void render(sf::RenderTarget &renderer);
 private:
     gui::DocumentationBlock m_documentation_block;
+    gui::Simulation m_simulation;
 
     std::vector<gui::ActingLogicalComponent> m_acting_logical_components;
     std::vector<gui::StaticLogicalComponent> m_static_logical_components;

@@ -38,10 +38,10 @@ namespace gui {
 
     void Button::handleEvent(sf::Event e, const sf::RenderWindow &window) {
         if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::MouseMoved) {
-            auto pos = sf::Mouse::getPosition(window);
+            sf::Vector2f pos(sf::Mouse::getPosition(window));
 
             // cursor over button
-            if (m_background.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
+            if (m_background.getGlobalBounds().contains(pos)) {
                 if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
                     // click
                     m_callback();
