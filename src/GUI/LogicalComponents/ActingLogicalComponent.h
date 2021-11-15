@@ -5,15 +5,20 @@
 #include <vector>
 #include "Colors.h"
 #include "Input.h"
+#include "Wire.h"
+#include <memory>
 
 namespace gui {
     class ActingLogicalComponent : public Widget {
     public:
-        ActingLogicalComponent(const sf::Vector2f &position, const std::string &name, bool is_dragged);
+        ActingLogicalComponent(
+                const sf::Vector2f &position,
+                bool is_dragged
+        );
 
-        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
+        void handleEvent(sf::Event e, const sf::RenderWindow &window) override;
 
-        virtual void render(sf::RenderTarget &renderer);
+        void render(sf::RenderTarget &renderer) override;
 
         const sf::Vector2f &getSize() const {
             return m_size;
@@ -37,11 +42,10 @@ namespace gui {
 
         // shapes
         sf::RectangleShape m_component;
-        sf::Text m_name;
 
         // m_inputs
         int m_inputs_count;
-        std::vector<Input> m_inputs;
+        std::vector<std::unique_ptr<Input>> m_inputs;
     };
 }
 

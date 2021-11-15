@@ -3,7 +3,7 @@
 
 namespace gui {
     ActingLogicalComponent::ActingLogicalComponent(
-            const sf::Vector2f &position, const std::string &name, bool is_dragged
+            const sf::Vector2f &position, bool is_dragged
     ) : m_position(position), m_is_dragged(is_dragged), m_size(70, 70) {
         m_component.setOutlineThickness(2);
         m_component.setOutlineColor(gui::colors::dark_primary);
@@ -13,7 +13,9 @@ namespace gui {
 
         m_inputs.reserve(m_inputs_count);
         for (int i = 0; i < m_inputs_count; ++i) {
-            m_inputs.emplace_back(this, i);
+            m_inputs.push_back(
+                    std::move(std::make_unique<Input>(this, i))
+            );
         }
 
         redraw();
@@ -47,8 +49,8 @@ namespace gui {
     void ActingLogicalComponent::render(sf::RenderTarget &renderer) {
         renderer.draw(m_component);
 
-        for (Input &input: m_inputs) {
-            input.render(renderer);
+        for (auto &input: m_inputs) {
+            input->render(renderer);
         }
     }
 
@@ -56,8 +58,8 @@ namespace gui {
         m_component.setFillColor(gui::colors::primary + (m_is_dragged ? sf::Color(40, 40, 40) : sf::Color::Black));
         m_component.setPosition(m_position);
 
-        for (Input &input: m_inputs) {
-            input.redraw(this);
+        for (auto &input: m_inputs) {
+            input->redraw();
         }
     }
 }

@@ -2,7 +2,7 @@
 #define LOGICGAMEENGINE_SIMULATION_H
 
 #include "Widget.h"
-#include "StaticLogicalComponent.h"
+#include <memory>
 #include "ActingLogicalComponent.h"
 #include "Wire.h"
 #include <vector>
@@ -10,16 +10,25 @@
 namespace gui {
     class Simulation : public Widget {
     public:
-        Simulation();
+        Simulation() = default;
+
+        template<typename T, typename... Args>
+        void addLogicalComponent(Args &&... args);
+
+        void addLogicalComponent(std::unique_ptr<ActingLogicalComponent> component);
 
         void handleEvent(sf::Event e, const sf::RenderWindow &window) override;
 
         void render(sf::RenderTarget &renderer) override;
 
-        std::vector<StaticLogicalComponent> m_static_components;
-        std::vector<ActingLogicalComponent> m_acting_components;
+        std::vector<std::unique_ptr<ActingLogicalComponent>> m_components;
         std::vector<Wire> m_wires;
     };
+
+    template<typename T, typename... Args>
+    void Simulation::addLogicalComponent(Args &&... args) {
+        addLogicalComponent(std::make_unique<T>(std::forward<Args>(args)...));
+    }
 }
 
 

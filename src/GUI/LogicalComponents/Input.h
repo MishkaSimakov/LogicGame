@@ -14,7 +14,7 @@ namespace gui {
 
         virtual void render(sf::RenderTarget &renderer);
 
-        void redraw(ActingLogicalComponent *component);
+        void redraw();
 
         enum type {
             INPUT = 0,
@@ -24,9 +24,9 @@ namespace gui {
     protected:
         bool m_type;
         int m_id;
+        ActingLogicalComponent *m_component;
 
         sf::CircleShape m_shape;
-        bool is_dragged;
     };
 }
 

@@ -3,14 +3,16 @@
 #include <iostream>
 
 namespace gui {
-    Input::Input(ActingLogicalComponent *component, int id) : m_id(id) {
+    Input::Input(ActingLogicalComponent *component, int id) :
+            m_component(component),
+            m_id(id) {
         m_shape.setRadius(5);
         m_shape.setFillColor(sf::Color::Magenta); // TODO: change to gui::colors
         m_shape.setOutlineThickness(1);
         m_shape.setOutlineColor(sf::Color::Black);
         m_shape.setOrigin(5, 5);
 
-        redraw(component);
+        redraw();
     }
 
     void Input::render(sf::RenderTarget &renderer) {
@@ -22,16 +24,16 @@ namespace gui {
             sf::Vector2f pos(sf::Mouse::getPosition(window));
 
             if (m_shape.getGlobalBounds().contains(pos)) {
-                is_dragged = true;
+//                is_dragged = true;
             }
         }
     }
 
-    void Input::redraw(ActingLogicalComponent *component) {
+    void Input::redraw() {
         m_shape.setPosition(
-                component->getSize().x / (float) (component->getInputsCount() + 1) * (float) (m_id + 1) +
-                component->getPosition().x,
-                component->getPosition().y + component->getSize().y
+                m_component->getSize().x / (float) (m_component->getInputsCount() + 1) * (float) (m_id + 1) +
+                m_component->getPosition().x,
+                m_component->getPosition().y + m_component->getSize().y
         );
     }
 }

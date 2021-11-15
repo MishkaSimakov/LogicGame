@@ -3,8 +3,9 @@
 
 #include "DocumentationBlock.h"
 #include "Simulation.h"
+#include <memory>
+#include "StaticLogicalComponent.h"
 #include "BaseState.h"
-#include "ResourceHolder.h"
 #include "Game.h"
 
 
@@ -24,8 +25,7 @@ private:
     gui::DocumentationBlock m_documentation_block;
     gui::Simulation m_simulation;
 
-    std::vector<gui::ActingLogicalComponent> m_acting_logical_components;
-    std::vector<gui::StaticLogicalComponent> m_static_logical_components;
+    std::vector<std::unique_ptr<gui::StaticLogicalComponent>> m_static_logical_components;
 };
 
 #endif // LEVELSTATE_H

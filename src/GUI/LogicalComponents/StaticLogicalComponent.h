@@ -1,16 +1,16 @@
 #ifndef LOGICALCOMPONENT_H
 #define LOGICALCOMPONENT_H
 
-#include "SFML/Graphics.hpp"
+#include "Widget.h"
 #include <vector>
 #include "Colors.h"
 #include "ActingLogicalComponent.h"
+#include "Simulation.h"
 
 namespace gui {
-    class StaticLogicalComponent {
+    class StaticLogicalComponent : Widget {
     public:
-        StaticLogicalComponent(const sf::Vector2f &position, const std::string &name,
-                               std::vector<ActingLogicalComponent> *acting_components_list);
+        StaticLogicalComponent(const sf::Vector2f &position, Simulation *simulation);
 
         virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
 
@@ -18,8 +18,7 @@ namespace gui {
 
     protected:
         sf::RectangleShape m_component;
-        sf::Text m_name;
-        std::vector<ActingLogicalComponent> *m_acting_components_list;
+        Simulation *m_simulation;
     };
 }
 
