@@ -3,6 +3,7 @@
 
 #include "ResourceManager.h"
 #include "SFML/Graphics.hpp"
+#include "LevelResource.h"
 
 class ResourceHolder
 {
@@ -11,6 +12,7 @@ public:
 
     ResourceManager<sf::Font> fonts;
     ResourceManager<sf::Texture> textures;
+    ResourceManager<Resources::LevelResource> levels;
 private:
     ResourceHolder();
 };

@@ -23,6 +23,7 @@ namespace gui {
 
     void ActingLogicalComponent::handleEvent(sf::Event e, const sf::RenderWindow &window) {
         if (m_is_dragged) {
+            // move logical component
             if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
                 m_is_dragged = false;
             } else if (e.type == sf::Event::MouseMoved) {
