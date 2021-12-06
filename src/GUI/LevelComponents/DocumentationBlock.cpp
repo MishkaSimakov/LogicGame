@@ -1,8 +1,7 @@
 #include "DocumentationBlock.h"
 
 namespace gui {
-
-    DocumentationBlock::DocumentationBlock(const std::string &title, const std::string &description, float height) :
+    DocumentationBlock::DocumentationBlock(const std::wstring &title, const std::wstring &description, float height) :
             m_background(
                     {0, 0}, {400, height}, 10, colors::gray,
                     RoundedRectangle::BOTTOM_RIGHT | RoundedRectangle::TOP_RIGHT
@@ -23,11 +22,11 @@ namespace gui {
         });
     }
 
-    void DocumentationBlock::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+    bool DocumentationBlock::handleEvent(sf::Event e, const sf::RenderWindow &window) {
         if (m_is_opened)
-            m_hide_button.handleEvent(e, window);
+            return m_hide_button.handleEvent(e, window);
         else
-            m_show_button.handleEvent(e, window);
+            return m_show_button.handleEvent(e, window);
     }
 
     void DocumentationBlock::render(sf::RenderTarget &renderer) {

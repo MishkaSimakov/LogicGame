@@ -1,22 +1,26 @@
 #ifndef LOGICGAMEENGINE_ACTINGLOGICALCOMPONENT_H
 #define LOGICGAMEENGINE_ACTINGLOGICALCOMPONENT_H
 
+#include "Widget.h"
+#include "Colors.h"
+#include "Connector.h"
+#include "Simulation.h"
+#include "ResourceHolder.h"
+
+#include <memory>
 #include <string>
 #include <vector>
-#include "Colors.h"
-#include "Input.h"
-#include "Wire.h"
-#include <memory>
 
 namespace gui {
     class ActingLogicalComponent : public Widget {
     public:
         ActingLogicalComponent(
                 const sf::Vector2f &position,
+                const std::string &texture,
                 bool is_dragged
         );
 
-        void handleEvent(sf::Event e, const sf::RenderWindow &window) override;
+        bool handleEvent(sf::Event e, const sf::RenderWindow &window) override;
 
         void render(sf::RenderTarget &renderer) override;
 
@@ -32,6 +36,13 @@ namespace gui {
             return m_inputs_count;
         }
 
+        Connector *tryToConnectWire(Connector *connector, const sf::Vector2f &position);
+        Connector *canConnectWire(Connector *connector, const sf::Vector2f &position);
+
+//        void forwardLink(ActingLogicalComponent *another, int output_id) {
+//            m_output_components[output_id] = another;
+//        }
+
     protected:
         void redraw();
 
@@ -39,13 +50,19 @@ namespace gui {
         sf::Vector2f m_position;
         bool m_is_dragged;
 
-
         // shapes
         sf::RectangleShape m_component;
 
-        // m_inputs
+        // inputs
         int m_inputs_count;
-        std::vector<std::unique_ptr<Input>> m_inputs;
+        std::vector<std::unique_ptr<Connector>> m_inputs;
+
+        // outputs
+        int m_outputs_count;
+        std::vector<std::unique_ptr<Connector>> m_outputs;
+
+        // links to next components in circuit
+        std::vector<ActingLogicalComponent *> m_output_components;
     };
 }
 

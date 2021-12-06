@@ -3,22 +3,23 @@
 
 #include <string>
 #include <fstream>
+#include <SFML/Graphics.hpp>
 
 namespace Resources {
     class LevelResource {
     public:
         LevelResource() = default;
 
-        const std::string &getTitle() const {
+        const std::wstring &getTitle() const {
             return title;
         }
 
-        const std::string &getDescription() const {
+        const std::wstring &getDescription() const {
             return description;
         }
 
         bool loadFromFile(const std::string& filename) {
-            std::ifstream file;
+            std::wifstream file;
             file.open(filename);
 
             if (!file.is_open())
@@ -29,12 +30,15 @@ namespace Resources {
 
             file.close();
 
+            title = sf::String::fromUtf8(title.begin(), title.end());
+            description = sf::String::fromUtf8(description.begin(), description.end());
+
             return true;
         }
 
     protected:
-        std::string title;
-        std::string description;
+        std::wstring title;
+        std::wstring description;
     };
 }
 

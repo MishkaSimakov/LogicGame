@@ -6,7 +6,7 @@
 class Widget
 {
 public:
-    virtual void handleEvent(sf::Event e, const sf::RenderWindow &window) {};
+    virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window) { return false; };
     virtual void render(sf::RenderTarget &renderer) = 0;
 };
 

@@ -3,7 +3,7 @@
 MainMenuState::MainMenuState(Game &game) :
         BaseState(game),
         m_play_button(
-                {10, 10}, {200, 100}, "Start",
+                {540, 310}, {200, 100}, L"Играть",
                 gui::colors::white, "arial", 30,
                 gui::colors::primary, 2, gui::colors::dark_primary
         ) {

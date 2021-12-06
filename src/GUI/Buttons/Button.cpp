@@ -4,7 +4,7 @@ namespace gui {
     Button::Button(
             const sf::Vector2f &position,
             const sf::Vector2f &button_size,
-            const std::string &text,
+            const std::wstring &text,
             const sf::Color &text_color,
             const std::string &font,
             unsigned int font_size,
@@ -36,7 +36,7 @@ namespace gui {
         updateTextPosition();
     }
 
-    void Button::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+    bool Button::handleEvent(sf::Event e, const sf::RenderWindow &window) {
         if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::MouseMoved) {
             sf::Vector2f pos(sf::Mouse::getPosition(window));
 
@@ -55,12 +55,14 @@ namespace gui {
                     updateColor(HOVER);
                 }
 
-                return;
+                return true;
             }
 
             // cursor somewhere else
             updateColor(NORMAL);
         }
+
+        return false;
     }
 
     void Button::setTexture(const sf::Texture &texture) {

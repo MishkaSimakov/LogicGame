@@ -5,6 +5,7 @@
 #include "Simulation.h"
 #include <memory>
 #include "StaticLogicalComponent.h"
+#include "StaticComponentsBlock.h"
 #include "BaseState.h"
 #include "Game.h"
 
@@ -23,9 +24,7 @@ public:
     virtual void render(sf::RenderTarget &renderer);
 private:
     gui::DocumentationBlock m_documentation_block;
-    gui::Simulation m_simulation;
-
-    std::vector<std::unique_ptr<gui::StaticLogicalComponent>> m_static_logical_components;
+    gui::StaticComponentsBlock m_static_components_block;
 };
 
 #endif // LEVELSTATE_H

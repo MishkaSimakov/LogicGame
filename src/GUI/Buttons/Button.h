@@ -1,6 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include <string>
 #include "Widget.h"
 #include "ResourceHolder.h"
 #include <functional>
@@ -12,7 +13,7 @@ namespace gui {
         Button(
                 const sf::Vector2f &position,
                 const sf::Vector2f &button_size,
-                const std::string &text = "",
+                const std::wstring &text = L"",
                 const sf::Color &text_color = gui::colors::black,
                 const std::string &font = "arial",
                 unsigned int font_size = 30,
@@ -24,7 +25,7 @@ namespace gui {
                 const sf::Color &active_color = gui::colors::dark_primary
         );
 
-        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
+        virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window);
 
         virtual void render(sf::RenderTarget &renderer);
 
@@ -40,6 +41,7 @@ namespace gui {
         };
 
         void updateTextPosition();
+
         void updateColor(unsigned int state);
 
         std::function<void(void)> m_callback = []() {};

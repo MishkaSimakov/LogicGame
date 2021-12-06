@@ -1,12 +1,10 @@
 #include "ActingLogicalComponent.h"
-#include <iostream>
 
 namespace gui {
     ActingLogicalComponent::ActingLogicalComponent(
-            const sf::Vector2f &position, bool is_dragged
+            const sf::Vector2f &position, const std::string &texture, bool is_dragged
     ) : m_position(position), m_is_dragged(is_dragged), m_size(70, 70) {
-        m_component.setOutlineThickness(2);
-        m_component.setOutlineColor(gui::colors::dark_primary);
+        m_component.setTexture(&ResourceHolder::get().textures.get(texture));
         m_component.setSize(m_size);
 
         m_inputs_count = 2;
@@ -14,14 +12,22 @@ namespace gui {
         m_inputs.reserve(m_inputs_count);
         for (int i = 0; i < m_inputs_count; ++i) {
             m_inputs.push_back(
-                    std::move(std::make_unique<Input>(this, i))
+                    std::move(std::make_unique<Connector>(this, Connector::type::INPUT, i))
             );
         }
 
         redraw();
     }
 
-    void ActingLogicalComponent::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+    bool ActingLogicalComponent::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+        for (auto &input: m_inputs) {
+            input->handleEvent(e, window);
+
+            if (input->m_is_dragging_wire) {
+                return true;
+            }
+        }
+
         if (m_is_dragged) {
             // move logical component
             if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
@@ -31,20 +37,20 @@ namespace gui {
             }
 
             redraw();
+        } else if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+            auto pos = sf::Mouse::getPosition(window);
+
+            if (m_component.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
+                m_is_dragged = true;
+                redraw();
+            } else {
+                return false;
+            }
         } else {
-            if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-                auto pos = sf::Mouse::getPosition(window);
-
-                if (m_component.getGlobalBounds().contains((float) pos.x, (float) pos.y)) {
-                    m_is_dragged = true;
-                    redraw();
-                }
-            }
-
-            for (int i = 0; i < m_inputs_count; ++i) {
-                //m_inputs[m_inputs_count].handleEvent(e, window);
-            }
+            return false;
         }
+
+        return true;
     }
 
     void ActingLogicalComponent::render(sf::RenderTarget &renderer) {
@@ -56,11 +62,28 @@ namespace gui {
     }
 
     void ActingLogicalComponent::redraw() {
-        m_component.setFillColor(gui::colors::primary + (m_is_dragged ? sf::Color(40, 40, 40) : sf::Color::Black));
         m_component.setPosition(m_position);
 
         for (auto &input: m_inputs) {
             input->redraw();
         }
+    }
+
+    Connector *ActingLogicalComponent::tryToConnectWire(Connector *connector, const sf::Vector2f &position) {
+        return gui::Simulation::get()->tryToConnectWire(connector, position);
+    }
+
+    Connector *ActingLogicalComponent::canConnectWire(Connector *connector, const sf::Vector2f &position) {
+        if (connector->m_component == this) {
+            return nullptr;
+        }
+
+        for (auto &input : m_inputs) {
+            if (input->canConnectWire(position)) {
+                return input.get();
+            }
+        }
+
+        return nullptr;
     }
 }

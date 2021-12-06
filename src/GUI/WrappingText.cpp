@@ -2,7 +2,7 @@
 
 namespace gui {
     WrappingText::WrappingText(
-            sf::Vector2f position, float max_width, std::string content,
+            sf::Vector2f position, float max_width, std::wstring content,
             int font_size, const std::string &font_name
     ) :
             m_font_size(font_size),

@@ -2,23 +2,24 @@
 #define LOGICALCOMPONENT_H
 
 #include "Widget.h"
-#include <vector>
 #include "Colors.h"
-#include "ActingLogicalComponent.h"
 #include "Simulation.h"
+#include "ActingLogicalComponent.h"
+
+#include <vector>
+#include "ResourceHolder.h"
 
 namespace gui {
     class StaticLogicalComponent : Widget {
     public:
-        StaticLogicalComponent(const sf::Vector2f &position, Simulation *simulation);
+        StaticLogicalComponent(const sf::Vector2f &position, const std::string &texture);
 
-        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
+        bool handleEvent(sf::Event e, const sf::RenderWindow &window) override;
 
-        virtual void render(sf::RenderTarget &renderer);
+        void render(sf::RenderTarget &renderer) override;
 
     protected:
         sf::RectangleShape m_component;
-        Simulation *m_simulation;
     };
 }
 

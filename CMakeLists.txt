@@ -23,7 +23,7 @@ add_executable(LogicGameEngine
         src/ResourceManager/ResourceHolder.cpp
         src/States/LevelState.cpp
         src/States/MainMenuState.cpp
-        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h src/GUI/LogicalComponents/Wire.cpp src/GUI/LogicalComponents/Wire.h src/GUI/LogicalComponents/Input.cpp src/GUI/LogicalComponents/Input.h src/GUI/LogicalComponents/Simulation.cpp src/GUI/LogicalComponents/Simulation.h src/ResourceManager/Resources/LevelResource.h)
+        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h src/GUI/LogicalComponents/Connector.cpp src/GUI/LogicalComponents/Connector.h src/GUI/LogicalComponents/Simulation.cpp src/GUI/LogicalComponents/Simulation.h src/ResourceManager/Resources/LevelResource.h src/GUI/LevelComponents/StaticComponentsBlock.cpp src/GUI/LevelComponents/StaticComponentsBlock.h)
 
 # include SFML
 set(SFML_ROOT D:/Programs/CLionProjects/Libraries/SFML-debug/)

@@ -11,9 +11,9 @@
 namespace gui {
     class DocumentationBlock : public Widget {
     public:
-        DocumentationBlock(const std::string &title, const std::string &description, float height);
+        DocumentationBlock(const std::wstring &title, const std::wstring &description, float height);
 
-        virtual void handleEvent(sf::Event e, const sf::RenderWindow &window);
+        virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window);
 
         virtual void render(sf::RenderTarget &renderer);
     private:
