@@ -25,6 +25,7 @@ namespace gui {
 
         void setConnection(Connector *connection) {
             m_connection = connection;
+            redraw();
         }
 
         int getType() const {

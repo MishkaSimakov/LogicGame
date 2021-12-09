@@ -17,10 +17,8 @@ namespace gui {
 
         void reset();
 
-        template<typename T, typename... Args>
+        template<typename... Args>
         void addLogicalComponent(Args &&... args);
-
-        void addLogicalComponent(std::unique_ptr<ActingLogicalComponent> component);
 
         bool handleEvent(Event e) override;
 
@@ -34,13 +32,14 @@ namespace gui {
 
         sf::View m_simulation_view;
     protected:
-
         Simulation() : m_simulation_view(sf::FloatRect(0., 0., 1280., 720.)) {};
     };
 
-    template<typename T, typename... Args>
+    template<typename... Args>
     void Simulation::addLogicalComponent(Args &&... args) {
-        addLogicalComponent(std::make_unique<T>(std::forward<Args>(args)...));
+        m_components.emplace_back(
+                std::make_unique<ActingLogicalComponent>(std::forward<Args>(args)...)
+        );
     }
 }
 

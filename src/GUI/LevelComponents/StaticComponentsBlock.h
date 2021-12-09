@@ -6,6 +6,7 @@
 #include "RoundedRectangle.h"
 #include "Colors.h"
 #include "And.h"
+#include "Or.h"
 #include <memory>
 
 namespace gui {
@@ -13,13 +14,16 @@ namespace gui {
     public:
         StaticComponentsBlock();
 
-        virtual bool handleEvent(Event e);
+        bool handleEvent(Event e) override;
 
-        virtual void render(sf::RenderTarget &renderer);
+        void render(sf::RenderTarget &renderer) override;
 
+        void addStaticComponent(BaseLogicalComponent &&logical_component_data);
     private:
+        sf::Vector2f m_right_position;
+
         RoundedRectangle m_background;
-        std::vector<std::unique_ptr<gui::StaticLogicalComponent>> m_static_logical_components;
+        std::vector<std::unique_ptr<StaticLogicalComponent>> m_static_logical_components;
     };
 }
 

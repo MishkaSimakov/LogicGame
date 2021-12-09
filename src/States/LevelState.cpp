@@ -8,6 +8,9 @@ LevelState::LevelState(Game &game) :
                 (float) game.getWindow().getSize().y
         ) {
     gui::Simulation::get()->reset();
+
+    m_static_components_block.addStaticComponent(And());
+    m_static_components_block.addStaticComponent(Or());
 }
 
 void LevelState::handleEvent(Event e) {

@@ -63,10 +63,6 @@ namespace gui {
         return false;
     }
 
-    void Simulation::addLogicalComponent(std::unique_ptr<ActingLogicalComponent> component) {
-        m_components.push_back(std::move(component));
-    }
-
     Connector *Simulation::tryToConnectWire(Connector *connector, const sf::Vector2f &position) {
         for (auto &component: m_components) {
             Connector *c = component->checkIfCanConnectWire(connector, position);
