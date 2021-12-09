@@ -1,10 +1,11 @@
 #ifndef LOGICGAMEENGINE_STATICCOMPONENTSBLOCK_H
 #define LOGICGAMEENGINE_STATICCOMPONENTSBLOCK_H
 
-#include "StaticLogicalComponent.h"
 #include "Widget.h"
+#include "StaticLogicalComponent.h"
 #include "RoundedRectangle.h"
 #include "Colors.h"
+#include "And.h"
 #include <memory>
 
 namespace gui {
@@ -12,7 +13,7 @@ namespace gui {
     public:
         StaticComponentsBlock();
 
-        virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window);
+        virtual bool handleEvent(Event e);
 
         virtual void render(sf::RenderTarget &renderer);
 

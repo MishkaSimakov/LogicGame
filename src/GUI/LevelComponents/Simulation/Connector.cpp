@@ -3,10 +3,9 @@
 #include "ActingLogicalComponent.h"
 
 namespace gui {
-    Connector::Connector(ActingLogicalComponent *component, bool type, int id) :
-            m_component(component),
+    Connector::Connector(const sf::Vector2f &position, int type) :
+            m_position(position),
             m_type(type),
-            m_id(id),
             m_wire(sf::Quads, 4) {
         m_shape.setRadius(5);
         m_shape.setFillColor(gui::colors::light);
@@ -22,25 +21,35 @@ namespace gui {
     }
 
     void Connector::redraw() {
-        redrawConnector();
-        redrawWire();
+        m_shape.setPosition(m_position); // set connector position
+
+        if (m_is_dragging_wire || (m_connection && m_type == type::INPUT)) {
+            redrawWire();
+        }
+        if (m_connection) {
+            m_connection->redrawWire();
+        }
     }
 
     void Connector::render(sf::RenderTarget &renderer) {
-        if (m_is_dragging_wire || m_connection) {
+        if (m_is_dragging_wire || (m_connection && m_type == type::INPUT)) {
             renderer.draw(m_wire);
         }
 
         renderer.draw(m_shape);
     }
 
-    bool Connector::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+    bool Connector::handleEvent(Event e) {
+        auto pos = (sf::Vector2f) sf::Mouse::getPosition(e.getRenderTarget());
+
         if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-            sf::Vector2f pos(sf::Mouse::getPosition(window));
-
             if (m_shape.getGlobalBounds().contains(pos)) {
-                m_is_dragging_wire = true;
+                if (m_connection) {
+                    m_connection->setConnection(nullptr);
+                    m_connection = nullptr;
+                }
 
+                m_is_dragging_wire = true;
                 m_temp_wire_end_position = pos;
 
                 redrawWire();
@@ -50,17 +59,19 @@ namespace gui {
 
             return false;
         } else if (e.type == sf::Event::MouseMoved && m_is_dragging_wire) {
-            m_temp_wire_end_position = (sf::Vector2f) sf::Mouse::getPosition(window);
+            m_temp_wire_end_position = pos;
 
             redrawWire();
         } else if (m_is_dragging_wire && e.type == sf::Event::MouseButtonReleased &&
                    e.mouseButton.button == sf::Mouse::Left) {
             m_is_dragging_wire = false;
 
-            m_connection = m_component->tryToConnectWire(this, m_temp_wire_end_position);
+            m_connection = Simulation::get()->tryToConnectWire(this, m_temp_wire_end_position);
 
             if (m_connection == nullptr)
                 return true;
+
+            m_connection->setConnection(this);
         } else {
             return false;
         }
@@ -68,16 +79,8 @@ namespace gui {
         return true;
     }
 
-    void Connector::redrawConnector() {
-        m_shape.setPosition(
-                m_component->getSize().x / (float) (m_component->getInputsCount() + 1) * (float) (m_id + 1) +
-                m_component->getPosition().x,
-                m_component->getPosition().y + m_component->getSize().y
-        );
-    }
-
     void Connector::redrawWire() {
-        sf::Vector2f a = m_shape.getPosition(), b {0., 0.};
+        sf::Vector2f a = m_shape.getPosition(), b{0., 0.};
 
         if (m_is_dragging_wire) {
             b = m_temp_wire_end_position;

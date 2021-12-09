@@ -36,9 +36,11 @@ namespace gui {
         updateTextPosition();
     }
 
-    bool Button::handleEvent(sf::Event e, const sf::RenderWindow &window) {
-        if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::MouseMoved) {
-            sf::Vector2f pos(sf::Mouse::getPosition(window));
+    bool Button::handleEvent(Event e) {
+        if (e.type == sf::Event::MouseButtonPressed
+            || e.type == sf::Event::MouseButtonReleased
+            || e.type == sf::Event::MouseMoved) {
+            sf::Vector2f pos(sf::Mouse::getPosition(e.getRenderTarget()));
 
             // cursor over button
             if (m_background.getGlobalBounds().contains(pos)) {

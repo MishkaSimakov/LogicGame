@@ -13,7 +13,7 @@ namespace gui {
     public:
         DocumentationBlock(const std::wstring &title, const std::wstring &description, float height);
 
-        virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window);
+        bool handleEvent(Event e) override;
 
         virtual void render(sf::RenderTarget &renderer);
     private:

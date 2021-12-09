@@ -7,14 +7,14 @@ gui::StaticComponentsBlock::StaticComponentsBlock() :
     m_static_logical_components.push_back(
             std::move(std::make_unique<gui::StaticLogicalComponent>(
                     sf::Vector2f(510, 610),
-                    "LogicalComponents/and"
+                    And()
             ))
     );
 }
 
-bool gui::StaticComponentsBlock::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+bool gui::StaticComponentsBlock::handleEvent(Event e) {
     for (auto &static_logical_component: m_static_logical_components) {
-        if (static_logical_component->handleEvent(e, window))
+        if (static_logical_component->handleEvent(e))
             return true;
     }
 

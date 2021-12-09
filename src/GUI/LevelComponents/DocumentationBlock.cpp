@@ -22,11 +22,11 @@ namespace gui {
         });
     }
 
-    bool DocumentationBlock::handleEvent(sf::Event e, const sf::RenderWindow &window) {
+    bool DocumentationBlock::handleEvent(Event e) {
         if (m_is_opened)
-            return m_hide_button.handleEvent(e, window);
+            return m_hide_button.handleEvent(e);
         else
-            return m_show_button.handleEvent(e, window);
+            return m_show_button.handleEvent(e);
     }
 
     void DocumentationBlock::render(sf::RenderTarget &renderer) {

@@ -2,6 +2,7 @@
 #define BASESTATE_H
 
 #include "SFML/Graphics.hpp"
+#include "Event.h"
 #include <iostream>
 
 class Game;
@@ -11,7 +12,7 @@ class BaseState
 public:
     BaseState(Game &game) : m_game(&game) {};
 
-    virtual void handleEvent(sf::Event) {}
+    virtual void handleEvent(Event) {}
 
     virtual void handleInput() = 0;
 

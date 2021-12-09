@@ -1,11 +1,12 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <string>
 #include "Widget.h"
 #include "ResourceHolder.h"
-#include <functional>
 #include "Colors.h"
+
+#include <functional>
+#include <string>
 
 namespace gui {
     class Button : public Widget {
@@ -25,7 +26,7 @@ namespace gui {
                 const sf::Color &active_color = gui::colors::dark_primary
         );
 
-        virtual bool handleEvent(sf::Event e, const sf::RenderWindow &window);
+        virtual bool handleEvent(Event e);
 
         virtual void render(sf::RenderTarget &renderer);
 

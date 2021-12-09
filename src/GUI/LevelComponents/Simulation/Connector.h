@@ -3,15 +3,14 @@
 
 #include "Widget.h"
 #include "cmath"
+#include "Simulation.h"
 
 namespace gui {
-    class ActingLogicalComponent;
-
     class Connector : public Widget {
     public:
-        Connector(ActingLogicalComponent *component, bool type, int id);
+        Connector(const sf::Vector2f &position, int type);
 
-        bool handleEvent(sf::Event e, const sf::RenderWindow &window) override;
+        bool handleEvent(Event e) override;
 
         void render(sf::RenderTarget &renderer) override;
 
@@ -19,21 +18,31 @@ namespace gui {
 
         void redraw();
 
+        void setPosition(const sf::Vector2f &position) {
+            m_position = position;
+            redraw();
+        }
+
+        void setConnection(Connector *connection) {
+            m_connection = connection;
+        }
+
+        int getType() const {
+            return m_type;
+        }
+
         enum type {
             INPUT = 0,
             OUTPUT = 1
         };
 
         bool m_is_dragging_wire = false;
-        ActingLogicalComponent *m_component;
-
     protected:
-        void redrawConnector();
-
         void redrawWire();
 
-        bool m_type;
-        int m_id;
+        int m_type;
+
+        sf::Vector2f m_position;
 
         Connector *m_connection = nullptr;
         sf::Vector2f m_temp_wire_end_position;

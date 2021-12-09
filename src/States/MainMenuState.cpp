@@ -12,8 +12,8 @@ MainMenuState::MainMenuState(Game &game) :
     });
 }
 
-void MainMenuState::handleEvent(sf::Event e) {
-    m_play_button.handleEvent(e, m_game->getWindow());
+void MainMenuState::handleEvent(Event e) {
+    m_play_button.handleEvent(e);
 }
 
 void MainMenuState::update(sf::Time delta) {}

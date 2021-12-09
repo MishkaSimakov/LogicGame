@@ -10,14 +10,14 @@ LevelState::LevelState(Game &game) :
     gui::Simulation::get()->reset();
 }
 
-void LevelState::handleEvent(sf::Event e) {
+void LevelState::handleEvent(Event e) {
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R) {
         gui::Simulation::get()->reset();
     }
 
-    gui::Simulation::get()->handleEvent(e, m_game->getWindow());
-    m_documentation_block.handleEvent(e, m_game->getWindow());
-    m_static_components_block.handleEvent(e, m_game->getWindow());
+    gui::Simulation::get()->handleEvent(e);
+    m_documentation_block.handleEvent(e);
+    m_static_components_block.handleEvent(e);
 }
 
 void LevelState::update(sf::Time delta) {}

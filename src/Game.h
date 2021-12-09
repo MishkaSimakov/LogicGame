@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "BaseState.h"
 #include "MainMenuState.h"
+#include "Event.h"
 #include <memory>
 #include <vector>
 

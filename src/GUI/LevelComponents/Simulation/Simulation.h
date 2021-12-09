@@ -7,8 +7,9 @@
 #include <vector>
 
 namespace gui {
-    class ActingLogicalComponent;
     class Connector;
+
+    class ActingLogicalComponent;
 
     class Simulation : public Widget {
     public:
@@ -21,7 +22,7 @@ namespace gui {
 
         void addLogicalComponent(std::unique_ptr<ActingLogicalComponent> component);
 
-        bool handleEvent(sf::Event e, const sf::RenderWindow &window) override;
+        bool handleEvent(Event e) override;
 
         void render(sf::RenderTarget &renderer) override;
 
@@ -30,8 +31,11 @@ namespace gui {
         std::vector<std::unique_ptr<ActingLogicalComponent>> m_components;
 
         bool need_to_reset{false};
+
+        sf::View m_simulation_view;
     protected:
-        Simulation() = default;
+
+        Simulation() : m_simulation_view(sf::FloatRect(0., 0., 1280., 720.)) {};
     };
 
     template<typename T, typename... Args>

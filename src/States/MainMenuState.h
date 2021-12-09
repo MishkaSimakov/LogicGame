@@ -2,6 +2,7 @@
 #define MAINMENUSTATE_H
 
 #include "BaseState.h"
+#include "Event.h"
 #include "Button.h"
 #include "Game.h"
 #include "LevelState.h"
@@ -13,7 +14,7 @@ public:
 
     virtual void handleInput() {}
 
-    virtual void handleEvent(sf::Event);
+    virtual void handleEvent(Event);
 
     virtual void update(sf::Time delta);
 

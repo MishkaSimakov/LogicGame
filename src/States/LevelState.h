@@ -1,13 +1,14 @@
 #ifndef LEVELSTATE_H
 #define LEVELSTATE_H
 
+#include "GUI/LevelComponents/Simulation/Simulation.h"
+#include "Event.h"
 #include "DocumentationBlock.h"
-#include "Simulation.h"
-#include <memory>
-#include "StaticLogicalComponent.h"
 #include "StaticComponentsBlock.h"
 #include "BaseState.h"
 #include "Game.h"
+
+#include <memory>
 
 
 class LevelState : public BaseState
@@ -17,7 +18,7 @@ public:
 
     virtual void handleInput() {}
 
-    virtual void handleEvent(sf::Event);
+    virtual void handleEvent(Event e);
 
     virtual void update(sf::Time delta);
 

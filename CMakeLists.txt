@@ -12,6 +12,8 @@ include_directories(
         src/GUI/Buttons
         src/GUI/LogicalComponents
         src/GUI/LevelComponents
+        src/GUI/LevelComponents/Simulation
+        src/GUI/LevelComponents/Simulation/LogicalComponents
 )
 
 add_executable(LogicGameEngine
@@ -19,11 +21,11 @@ add_executable(LogicGameEngine
         src/Game.cpp
         src/GUI/Buttons/Button.cpp
         src/GUI/RoundedRectangle.cpp
-        src/GUI/LogicalComponents/StaticLogicalComponent.cpp
+        src/GUI/LevelComponents/StaticLogicalComponent.cpp
         src/ResourceManager/ResourceHolder.cpp
         src/States/LevelState.cpp
         src/States/MainMenuState.cpp
-        src/GUI/LogicalComponents/ActingLogicalComponent.cpp src/GUI/LogicalComponents/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h src/GUI/LogicalComponents/Connector.cpp src/GUI/LogicalComponents/Connector.h src/GUI/LogicalComponents/Simulation.cpp src/GUI/LogicalComponents/Simulation.h src/ResourceManager/Resources/LevelResource.h src/GUI/LevelComponents/StaticComponentsBlock.cpp src/GUI/LevelComponents/StaticComponentsBlock.h)
+        src/GUI/LevelComponents/Simulation/ActingLogicalComponent.cpp src/GUI/LevelComponents/Simulation/ActingLogicalComponent.h src/GUI/LevelComponents/DocumentationBlock.cpp src/GUI/LevelComponents/DocumentationBlock.h src/GUI/WrappingText.cpp src/GUI/WrappingText.h src/GUI/LevelComponents/Simulation/Connector.cpp src/GUI/LevelComponents/Simulation/Connector.h src/GUI/LevelComponents/Simulation/Simulation.cpp src/GUI/LevelComponents/Simulation/Simulation.h src/ResourceManager/Resources/LevelResource.h src/GUI/LevelComponents/StaticComponentsBlock.cpp src/GUI/LevelComponents/StaticComponentsBlock.h src/Event.cpp src/Event.h src/GUI/LevelComponents/Simulation/LogicalComponents/BaseLogicalComponent.h src/GUI/LevelComponents/Simulation/LogicalComponents/And.h src/GUI/LevelComponents/Simulation/LogicalComponents/Or.h)
 
 # include SFML
 set(SFML_ROOT D:/Programs/CLionProjects/Libraries/SFML-debug/)

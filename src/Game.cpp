@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game() : m_window({1280, 720}, "Logic game") {
+Game::Game() : m_window({1280, 720}, L"Логическая игра") {
     m_window.setPosition({m_window.getPosition().x, 0});
     m_window.setFramerateLimit(60);
     pushState<MainMenuState>(*this);
@@ -62,16 +62,22 @@ void Game::exitGame() {
 }
 
 void Game::handleEvent() {
-    sf::Event e;
+    // custom event class that stores window data (that cannot be changed)
+    Event e;
 
     while (m_window.pollEvent(e)) {
+        e.setRenderTarget(m_window);
         getCurrentState().handleEvent(e);
 
         if (e.type == sf::Event::Closed) {
             m_window.close();
         } else if (e.type == sf::Event::Resized) {
-            sf::FloatRect visible_area(0, 0, e.size.width, e.size.height);
-            m_window.setView(sf::View(visible_area));
+            m_window.setView(sf::View({
+                                              0,
+                                              0,
+                                              static_cast<float>(e.size.width),
+                                              static_cast<float>(e.size.height)
+                                      }));
         }
     }
 }
