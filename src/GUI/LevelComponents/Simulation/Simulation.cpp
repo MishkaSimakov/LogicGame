@@ -1,5 +1,6 @@
 #include "Simulation.h"
 #include "ActingLogicalComponent.h"
+#include "Connector.h"
 
 namespace gui {
     Simulation *Simulation::get() {
@@ -17,13 +18,14 @@ namespace gui {
     }
 
     void Simulation::render(sf::RenderTarget &renderer) {
+        auto prev_view{renderer.getView()};
         renderer.setView(m_simulation_view);
 
         for (auto &component: m_components) {
             component->render(renderer);
         }
 
-        renderer.setView(renderer.getDefaultView());
+        renderer.setView(prev_view);
     }
 
     bool Simulation::handleEvent(Event e) {
@@ -72,5 +74,23 @@ namespace gui {
         }
 
         return nullptr;
+    }
+
+    void Simulation::runSimulation(std::vector<bool> &input_data, std::vector<bool> &result) {
+        if (input_data.size() != m_simulation_inputs.size()) {
+            exit(-1); // TODO: throw exception
+        }
+
+        for (int i = 0; i < m_simulation_inputs.size(); ++i) {
+            m_simulation_inputs[i]->setValue(input_data[i]);
+        }
+
+        std::vector<ActingLogicalComponent *> current_tick_components;
+
+        runSimulationTick();
+    }
+
+    void Simulation::runSimulationTick() {
+
     }
 }

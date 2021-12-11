@@ -40,7 +40,7 @@ namespace gui {
     }
 
     bool Connector::handleEvent(Event e) {
-        auto pos = (sf::Vector2f) sf::Mouse::getPosition(e.getRenderTarget());
+        sf::Vector2f pos(e.getMousePosRelativeTo(Simulation::get()->m_simulation_view));
 
         if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
             if (m_shape.getGlobalBounds().contains(pos)) {
@@ -104,5 +104,17 @@ namespace gui {
 
     bool Connector::canConnectWire(const sf::Vector2f &position) {
         return m_shape.getGlobalBounds().contains(position);
+    }
+
+    bool Connector::getValue() const {
+        return m_value;
+    }
+
+    void Connector::setValue(bool value, bool t) {
+        m_value = value;
+
+        if (m_connection && t) {
+            m_connection->setValue(value, false);
+        }
     }
 }

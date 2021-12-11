@@ -31,8 +31,23 @@ namespace gui {
         bool need_to_reset{false};
 
         sf::View m_simulation_view;
+
+        void addSimulationInput(std::unique_ptr<Connector> connector) {
+            m_simulation_inputs.push_back(std::move(connector));
+        };
+
+        void addSimulationOutput(std::unique_ptr<Connector> connector) {
+            m_simulation_outputs.push_back(std::move(connector));
+        }
+
+        void runSimulation(std::vector<bool> &input_data, std::vector<bool> &result);
     protected:
-        Simulation() : m_simulation_view(sf::FloatRect(0., 0., 1280., 720.)) {};
+        Simulation() : m_simulation_view(sf::FloatRect(0., 0., 1280., 720.)) {        };
+
+        void runSimulationTick();
+
+        std::vector<std::unique_ptr<Connector>> m_simulation_inputs;
+        std::vector<std::unique_ptr<Connector>> m_simulation_outputs;
     };
 
     template<typename... Args>

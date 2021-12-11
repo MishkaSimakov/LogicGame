@@ -10,7 +10,7 @@ namespace gui {
 
     bool StaticLogicalComponent::handleEvent(Event e) {
         if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-            sf::Vector2f pos(sf::Mouse::getPosition(e.getRenderTarget()));
+            sf::Vector2f pos(sf::Mouse::getPosition(e.getRenderTarget())); // TODO: изменить название на getRenderWindow
 
             if (m_component.getGlobalBounds().contains(pos.x, pos.y)) {
                 gui::Simulation::get()->addLogicalComponent(pos, m_logical_component_data, true);

@@ -46,12 +46,15 @@ namespace gui {
             }
         }
 
-        auto pos = (sf::Vector2f) sf::Mouse::getPosition(e.getRenderTarget());
+        sf::Vector2f pos(e.getMousePosRelativeTo(Simulation::get()->m_simulation_view));
 
         if (m_is_dragged) {
             // move logical component
             if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
                 m_is_dragged = false;
+
+                m_position.x = (float) ((int) m_position.x / 10) * 10;
+                m_position.y = (float) ((int) m_position.y / 10) * 10;
             } else if (e.type == sf::Event::MouseMoved) {
                 m_position = pos - m_dragging_origin;
             }

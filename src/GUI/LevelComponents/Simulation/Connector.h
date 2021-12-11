@@ -32,6 +32,10 @@ namespace gui {
             return m_type;
         }
 
+        bool getValue() const;
+
+        void setValue(bool value, bool t = true); // parameter t necessary to stop the recursion
+
         enum type {
             INPUT = 0,
             OUTPUT = 1
@@ -42,6 +46,8 @@ namespace gui {
         void redrawWire();
 
         int m_type;
+
+        bool m_value;
 
         sf::Vector2f m_position;
 
