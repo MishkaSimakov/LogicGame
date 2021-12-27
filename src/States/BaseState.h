@@ -1,28 +1,43 @@
-#ifndef BASESTATE_H
-#define BASESTATE_H
+#ifndef LOGICGAMEENGINE_BASESTATE_H
+#define LOGICGAMEENGINE_BASESTATE_H
 
-#include "SFML/Graphics.hpp"
-#include "Event.h"
-#include <iostream>
+#include <SFML/Graphics.hpp>
 
-class Game;
+class StateManager;
 
-class BaseState
-{
+class BaseState {
 public:
-    BaseState(Game &game) : m_game(&game) {};
+    BaseState(StateManager *stateManager)
+            : m_stateManager(stateManager), m_transparent(false),
+              m_transcendent(false) {}
 
-    virtual void handleEvent(Event) {}
+    virtual ~BaseState() {}
 
-    virtual void handleInput() = 0;
+    virtual void onCreate() = 0;
+    virtual void onDestroy() = 0;
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
+    virtual void update(const sf::Time &time) = 0;
+    virtual void draw() = 0;
 
-    virtual void update(sf::Time delta) {}
+    void setTransparent(const bool &transparent) {
+        m_transparent = transparent;
+    }
 
-    virtual void fixedUpdate(sf::Time delta) {}
+    bool isTransparent() const { return m_transparent; }
 
-    virtual void render(sf::RenderTarget &renderer) = 0;
+    void setTranscendent(bool transcendence) {
+        m_transcendent = transcendence;
+    }
+
+    bool isTranscendent() const { return m_transcendent; }
+
+    StateManager *getStateManager() { return m_stateManager; }
+
 protected:
-    Game *m_game;
+    StateManager *m_stateManager;
+    bool m_transparent;
+    bool m_transcendent;
 };
 
-#endif // BASESTATE_H
+#endif //LOGICGAMEENGINE_BASESTATE_H

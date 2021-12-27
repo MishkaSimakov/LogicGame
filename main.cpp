@@ -2,7 +2,12 @@
 
 int main() {
     Game game;
-    game.run();
+
+    while (!game.getWindow()->isDone()) {
+        game.update();
+        game.render();
+        game.lateUpdate();
+    }
 
     return 0;
 }

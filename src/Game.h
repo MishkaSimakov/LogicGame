@@ -1,59 +1,30 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef LOGICGAMEENGINE_GAME_H
+#define LOGICGAMEENGINE_GAME_H
 
-#include <SFML/Graphics.hpp>
-#include "BaseState.h"
-#include "MainMenuState.h"
-#include "Event.h"
-#include <memory>
-#include <vector>
+#include "Window.h"
+#include "StateManager.h"
 
-class Game
-{
+class Game {
 public:
     Game();
-    void run();
+    ~Game();
 
-    template <typename T, typename... Args>
-    void pushState(Args&&... args);
+    void Update();
+    void Render();
+    void LateUpdate();
 
-    void pushState(std::unique_ptr<BaseState> state);
+    Window *GetWindow();
 
-    void popState();
-    void exitGame();
-
-    template <typename T, typename... Args>
-    void changeState(Args&&... args);
-
-    const sf::RenderWindow& getWindow() const;
+    sf::Time GetElapsed();
+    void RestartClock();
 private:
-    void handleEvent();
-    void tryPopState();
+    Window m_window;
+    SharedContext m_context;
+    StateManager m_stateManager;
 
-    BaseState &getCurrentState();
-
-    std::vector<std::unique_ptr<BaseState>> m_states;
-
-    sf::RenderWindow m_window;
-
-    bool m_shouldPopState = false;
-    bool m_shouldExit = false;
-    bool m_shouldChangeState = false;
-    std::unique_ptr<BaseState> m_change;
+    sf::Clock m_clock;
+    sf::Time m_elapsed;
 };
 
-template <typename T, typename... Args>
-inline void Game::pushState(Args&&... args)
-{
-    pushState(std::make_unique<T>(std::forward<Args>(args)...));
-}
 
-template <typename T, typename... Args>
-void Game::changeState(Args&&... args)
-{
-    m_change = std::make_unique<T>(std::forward<Args>(args)...);
-    m_shouldPopState = true;
-    m_shouldChangeState = true;
-}
-
-#endif // GAME_H
+#endif //LOGICGAMEENGINE_GAME_H
