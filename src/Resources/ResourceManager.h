@@ -1,122 +1,56 @@
-#ifndef LOGICGAMEENGINE_RESOURCEMANAGER_H
-#define LOGICGAMEENGINE_RESOURCEMANAGER_H
+#ifndef RESOURCEMANAGER_H
+#define RESOURCEMANAGER_H
 
 #include <string>
 #include <unordered_map>
 #include <iostream>
-#include <sstream>
-#include <fstream>
 
-
-template<typename Derived, typename T>
-class ResourceManager {
+template<typename Resource>
+class ResourceManager
+{
 public:
-    ResourceManager(const std::string &pathsFile) {
-        LoadPaths(pathsFile);
-    }
+    ResourceManager(const std::string &folder, const std::string &extention) :
+        m_folder("resources/" + folder + "/"), m_extention("." + extention)
+    {}
 
-    virtual ~ResourceManager() { PurgeResources(); }
-
-    T *GetResource(const std::string &id) {
-        auto res = Find(id);
-        return (res ? res->first : nullptr);
-    }
-
-    std::string GetPath(const std::string &id) {
-        auto path = m_paths.find(id);
-        return (path != m_paths.end() ? path->second : "");
-    }
-
-    bool RequireResource(const std::string &id) {
-        auto res = Find(id);
-        if (res) {
-            ++res->second;
-            return true;
+    const Resource &get(const std::string &name)
+    {
+        if (!exists(name))
+        {
+            add(name);
         }
 
-        auto path = m_paths.find(id);
-        if (path == m_paths.end()) {
-            return false;
-        }
-
-        T *resource = Load(path->second);
-
-        if (!resource) {
-            return false;
-        }
-
-        m_resources.emplace(id, std::make_pair(resource, 1));
-
-        return true;
+        return m_resources.at(name);
     }
 
-    bool ReleaseResource(const std::string &id) {
-        auto res = Find(id);
-        if (!res) {
-            return false;
-        }
-        --res->second;
-
-        if (!res->second) {
-            Unload(id);
-        }
-
-        return true;
+    bool exists(const std::string &name)
+    {
+        return m_resources.find(name) != m_resources.end();
     }
 
-    void PurgeResources() {
-        while (m_resources.begin() != m_resources.end()) {
-            delete m_resources.begin()->second.first;
-            m_resources.erase(m_resources.begin());
+    void add(const std::string &name)
+    {
+        Resource resource;
+
+        if (!resource.loadFromFile(getFullFilename(name)))
+        {
+            std::cerr << "Error when loading resource called \"" << name << "\"";
+        }
+        else
+        {
+            m_resources.insert(std::make_pair(name, resource));
         }
     }
-
-    T *Load(const std::string &path) {
-        return static_cast<Derived *>(this)->Load(path);
-    }
-
-    std::pair<T *, unsigned int> *Find(const std::string &id) {
-        auto itr = m_resources.find(id);
-        return (itr != m_resources.end() ? &itr->second : nullptr);
-    }
-
-    bool Unload(const std::string &id) {
-        auto itr = m_resources.find(id);
-        if (itr == m_resources.end()) {
-            return false;
-        }
-
-        delete itr->second.first;
-        m_resources.erase(itr);
-        return true;
-    }
-
-    void LoadPaths(const std::string &pathFile) {
-        std::ifstream paths;
-        paths.open(pathFile);
-
-        if (!paths.is_open()) {
-            std::cerr <<
-                      "! Failed loading the path file: "
-                      << pathFile << std::endl;
-        }
-
-        std::string line;
-        while (std::getline(paths, line)) {
-            std::stringstream keystream(line);
-            std::string pathName;
-            std::string path;
-            keystream >> pathName;
-            keystream >> path;
-            m_paths.emplace(pathName, path);
-        }
-        paths.close();
-    }
-
 private:
-    std::unordered_map<std::string, std::pair<T *, unsigned int>> m_resources;
-    std::unordered_map<std::string, std::string> m_paths;
+    std::string getFullFilename(const std::string &name)
+    {
+        return m_folder + name + m_extention;
+    }
+
+    const std::string m_folder;
+    const std::string m_extention;
+
+    std::unordered_map<std::string, Resource> m_resources;
 };
 
-
-#endif //LOGICGAMEENGINE_RESOURCEMANAGER_H
+#endif // RESOURCEMANAGER_H

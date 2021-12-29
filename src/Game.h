@@ -1,30 +1,35 @@
-#ifndef LOGICGAMEENGINE_GAME_H
-#define LOGICGAMEENGINE_GAME_H
+#ifndef GAME_H
+#define GAME_H
 
-#include "Window.h"
+#include "SharedContext.h"
 #include "StateManager.h"
+#include "Window.h"
+
+#include <SFML/Graphics.hpp>
+
+#include <memory>
+#include <vector>
 
 class Game {
 public:
     Game();
     ~Game();
 
-    void Update();
-    void Render();
-    void LateUpdate();
+    void update();
+    void render();
+    void lateUpdate();
 
-    Window *GetWindow();
+    Window *getWindow();
 
-    sf::Time GetElapsed();
-    void RestartClock();
+    sf::Time getElapsed();
+    void restartClock();
 private:
     Window m_window;
+    StateManager m_state_manager;
     SharedContext m_context;
-    StateManager m_stateManager;
 
     sf::Clock m_clock;
     sf::Time m_elapsed;
 };
 
-
-#endif //LOGICGAMEENGINE_GAME_H
+#endif // GAME_H

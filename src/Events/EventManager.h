@@ -2,135 +2,186 @@
 #define LOGICGAMEENGINE_EVENTMANAGER_H
 
 #include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-#include <utility>
 #include <unordered_map>
 #include <functional>
-#include <iostream>
+#include <utility>
 
-enum class EventType {
-    KeyDown = sf::Event::KeyPressed,
-    KeyUp = sf::Event::KeyReleased,
-    MButtonDown = sf::Event::MouseButtonPressed,
-    MButtonUp = sf::Event::MouseButtonReleased,
-    MouseWheel = sf::Event::MouseWheelMoved,
-    WindowResized = sf::Event::Resized,
-    GainedFocus = sf::Event::GainedFocus,
-    LostFocus = sf::Event::LostFocus,
-    MouseEntered = sf::Event::MouseEntered,
-    MouseLeft = sf::Event::MouseLeft,
-    Closed = sf::Event::Closed,
-    TextEntered = sf::Event::TextEntered,
-    Keyboard = sf::Event::Count + 1, Mouse, Joystick
-};
+// Code had taken from https://github.com/johnBuffer/SFML-EventManager
 
-struct EventInfo {
-    EventInfo() { m_code = 0; }
+// Helper using for shorter types
+using EventCallback = std::function<void(const sf::Event &event)>;
 
-    explicit EventInfo(int event) { m_code = event; }
+template<typename T>
+using EventCallbackMap = std::unordered_map<T, EventCallback>;
 
-    union {
-        int m_code;
-    };
-};
-
-using Events = std::vector<std::pair<EventType, EventInfo>>;
-
-struct EventDetails {
-    EventDetails(std::string bindName)
-            : m_name(std::move(bindName)) {
-        Clear();
-    }
-
-    void Clear() {
-        m_size = sf::Vector2u(0, 0);
-        m_textEntered = 0;
-        m_mouse = sf::Vector2i(0, 0);
-        m_mouseWheelDelta = 0;
-        m_keyCode = -1;
-    }
-
-    std::string m_name;
-    sf::Vector2u m_size;
-    sf::Uint32 m_textEntered;
-    sf::Vector2i m_mouse;
-    int m_mouseWheelDelta;
-    int m_keyCode; // Single key code.
-};
-
-struct Binding {
-    explicit Binding(const std::string &name)
-            : m_name(name), m_details(name), c(0) {}
-
-    void BindEvent(EventType l_type,
-                   EventInfo l_info = EventInfo()) {
-        m_events.emplace_back(l_type, l_info);
-    }
-
-    Events m_events;
-    std::string m_name;
-    int c; // Count of events that are "happening".
-    EventDetails m_details;
-};
-
-using Bindings = std::unordered_map<std::string, Binding *>;
-
-
-using CallbackContainer = std::unordered_map<std::string, std::function<void(EventDetails *)>>;
 enum class StateType;
-using Callbacks = std::unordered_map<StateType, CallbackContainer>;
 
-class EventManager {
+template<typename T>
+using Callbacks = std::unordered_map<StateType, EventCallbackMap<T>>;
+
+
+/*
+    This class handles subtyped events like keyboard or mouse events
+    The unpack function allows to get relevant information from the processed event
+*/
+template<typename T>
+class SubTypeManager {
 public:
-    EventManager();
-    ~EventManager();
-    bool AddBinding(Binding *binding);
-    bool RemoveBinding(const std::string &name);
+    explicit SubTypeManager(std::function<T(const sf::Event &)> unpack) : m_unpack(std::move(unpack)) {}
 
-    void SetFocus(bool focus) { m_hasFocus = focus; }
+    ~SubTypeManager() = default;
 
-    template<class T>
-    bool AddCallback(StateType state, const std::string &name, void(T::*func)(EventDetails *), T *instance) {
-        auto itr = m_callbacks.emplace(state, CallbackContainer()).first;
-        auto temp = std::bind(func, instance, std::placeholders::_1);
-        return itr->second.emplace(name, temp).second;
+    void processEvent(StateType state, const sf::Event &event) const {
+        T sub_value = m_unpack(event);
+
+        executeCallback(state, sub_value, event);
+
+        // events that must be executed in every state
+        executeCallback(StateType(0), sub_value, event);
     }
 
-    bool RemoveCallback(StateType state, const std::string &name) {
-        auto itr = m_callbacks.find(state);
-
-        if (itr == m_callbacks.end()) {
-            return false;
-        }
-
-        auto itr2 = itr->second.find(name);
-        if (itr2 == itr->second.end()) {
-            return false;
-        }
-
-        itr->second.erase(name);
-        return true;
-    }
-
-    void HandleEvent(sf::Event &event);
-    void Update();
-
-    void SetCurrentState(StateType type);
-
-    sf::Vector2i GetMousePos(sf::RenderWindow *wind = nullptr) {
-        return (wind ? sf::Mouse::getPosition(*wind) : sf::Mouse::getPosition());
+    template<class T1>
+    void addCallback(StateType state, const T &sub_value, void(T1::*func)(const sf::Event &), T1 *instance) {
+        m_callbacks[state][sub_value] = std::bind(func, instance, std::placeholders::_1);
     }
 
 private:
-    void LoadBindings();
+    void executeCallback(StateType state, const T &sub_value, const sf::Event &event) const {
+        auto event_callbacks_itr(m_callbacks.find(state));
+        if (event_callbacks_itr == m_callbacks.end()) {
+            return;
+        }
 
-    Bindings m_bindings;
-    Callbacks m_callbacks;
-    StateType m_currentState;
+        auto callback_itr(event_callbacks_itr->second.find(sub_value));
 
-    bool m_hasFocus;
+        if (callback_itr == event_callbacks_itr->second.end()) {
+            return;
+        }
+
+        callback_itr->second(event);
+    }
+
+    Callbacks<T> m_callbacks;
+    std::function<T(const sf::Event &)> m_unpack;
 };
 
+
+/*
+    This class handles any Type of event and call its associated callbacks if any.
+    To process key event in a more convenient way its using a KeyManager
+*/
+class EventManager {
+public:
+    EventManager() : m_key_pressed_manager([](const sf::Event &event) { return event.key.code; }),
+                     m_key_released_manager([](const sf::Event &event) { return event.key.code; }),
+                     m_mouse_pressed_manager([](const sf::Event &event) { return event.mouseButton.button; }),
+                     m_mouse_released_manager([](const sf::Event &event) { return event.mouseButton.button; }),
+                     m_current_state(StateType(0)) {
+        // Register key events built in callbacks
+        this->addEventCallback(
+                StateType(0), sf::Event::EventType::KeyPressed,
+                &EventManager::processKeyPressedEvent, this
+        );
+        this->addEventCallback(
+                StateType(0), sf::Event::EventType::KeyReleased,
+                &EventManager::processKeyReleasedEvent, this
+        );
+        this->addEventCallback(
+                StateType(0), sf::Event::EventType::MouseButtonPressed,
+                &EventManager::processMousePressedEvent, this
+        );
+        this->addEventCallback(
+                StateType(0), sf::Event::EventType::MouseButtonReleased,
+                &EventManager::processMouseReleasedEvent, this
+        );
+    }
+
+    // Calls events' attached callbacks
+    void processEvent(const sf::Event &event) const {
+        executeCallback(m_current_state, event);
+
+        executeCallback(StateType(0), event);
+    }
+
+    void setCurrentState(StateType state) {
+        m_current_state = state;
+    }
+
+    // Attaches new callback to an event
+    template<class T1>
+    void
+    addEventCallback(StateType state, sf::Event::EventType type, void(T1::*func)(const sf::Event &), T1 *instance) {
+        m_events_callbacks[state][type] = std::bind(func, instance, std::placeholders::_1);
+    }
+
+    // Adds a key pressed callback
+    template<class T1>
+    void addKeyPressedCallback(StateType state, sf::Keyboard::Key key_code, void(T1::*func)(const sf::Event &),
+                               T1 *instance) {
+        m_key_pressed_manager.addCallback(state, key_code, func, instance);
+    }
+
+    // Adds a key released callback
+    template<class T1>
+    void addKeyReleasedCallback(StateType state, sf::Keyboard::Key key_code, void(T1::*func)(const sf::Event &),
+                                T1 *instance) {
+        m_key_released_manager.addCallback(state, key_code, func, instance);
+    }
+
+    // Adds a mouse pressed callback
+    template<class T1>
+    void addMousePressedCallback(StateType state, sf::Mouse::Button button, void(T1::*func)(const sf::Event &),
+                                 T1 *instance) {
+        m_mouse_pressed_manager.addCallback(state, button, func, instance);
+    }
+
+    // Adds a mouse released callback
+    template<class T1>
+    void addMouseReleasedCallback(StateType state, sf::Mouse::Button button, void(T1::*func)(const sf::Event &),
+                                  T1 *instance) {
+        m_mouse_released_manager.addCallback(state, button, func, instance);
+    }
+
+private:
+    void processKeyPressedEvent(const sf::Event &event) {
+        m_key_pressed_manager.processEvent(m_current_state, event);
+    }
+
+    void processKeyReleasedEvent(const sf::Event &event) {
+        m_key_released_manager.processEvent(m_current_state, event);
+    }
+
+    void processMousePressedEvent(const sf::Event &event) {
+        m_mouse_pressed_manager.processEvent(m_current_state, event);
+    }
+
+    void processMouseReleasedEvent(const sf::Event &event) {
+        m_mouse_released_manager.processEvent(m_current_state, event);
+    }
+
+    // Runs the callback associated with an event
+    void executeCallback(StateType state, const sf::Event &e) const {
+        auto event_callbacks_itr(m_events_callbacks.find(state));
+        if (event_callbacks_itr == m_events_callbacks.end()) {
+            return;
+        }
+
+        auto callback_itr(event_callbacks_itr->second.find(e.type));
+
+        if (callback_itr == event_callbacks_itr->second.end()) {
+            return;
+        }
+
+        callback_itr->second(e);
+    }
+
+    SubTypeManager<sf::Keyboard::Key> m_key_pressed_manager;
+    SubTypeManager<sf::Keyboard::Key> m_key_released_manager;
+    SubTypeManager<sf::Mouse::Button> m_mouse_pressed_manager;
+    SubTypeManager<sf::Mouse::Button> m_mouse_released_manager;
+    Callbacks<sf::Event::EventType> m_events_callbacks;
+
+    StateType m_current_state;
+};
 
 #endif //LOGICGAMEENGINE_EVENTMANAGER_H

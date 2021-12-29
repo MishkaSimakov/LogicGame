@@ -163,7 +163,7 @@ foreach(FIND_SFML_COMPONENT ${SFML_FIND_COMPONENTS})
                 PATH_SUFFIXES lib64 lib
                 PATHS ${FIND_SFML_PATHS})
 
-        # choose the entries that fit the requested link type
+        # choose the entries that fit the requested link Type
         if(SFML_STATIC_LIBRARIES)
             if(SFML_${FIND_SFML_COMPONENT_UPPER}_LIBRARY_STATIC_RELEASE)
                 set(SFML_${FIND_SFML_COMPONENT_UPPER}_LIBRARY_RELEASE ${SFML_${FIND_SFML_COMPONENT_UPPER}_LIBRARY_STATIC_RELEASE})

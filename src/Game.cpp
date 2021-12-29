@@ -1,40 +1,40 @@
 #include "Game.h"
 
-Game::Game() : m_window("Logic Game X", sf::Vector2u(800, 600)), m_stateManager(&m_context) {
+Game::Game() : m_window("Logic Game X", sf::Vector2u(1920, 1080)), m_state_manager(&m_context) {
     m_context.m_wind = &m_window;
-    m_context.m_eventManager = m_window.GetEventManager();
+    m_context.m_eventManager = m_window.getEventManager();
 
-    m_stateManager.SwitchTo(StateType::Intro);
+    m_state_manager.switchTo(StateType::Level);
 }
 
 Game::~Game() {}
 
-Window *Game::GetWindow() {
+Window *Game::getWindow() {
     return &m_window;
 }
 
-void Game::Update() {
-    m_window.Update(); // Update window events.
-    m_stateManager.Update(m_elapsed);
+void Game::update() {
+    m_window.update(); // Update window events.
+    m_state_manager.update(m_elapsed);
 }
 
-void Game::Render() {
-    m_window.BeginDraw();
+void Game::render() {
+    m_window.beginDraw();
 
-    m_stateManager.Draw();
+    m_state_manager.draw();
 
-    m_window.EndDraw();
+    m_window.endDraw();
 }
 
-void Game::LateUpdate() {
-    m_stateManager.ProcessRequests();
-    RestartClock();
+void Game::lateUpdate() {
+    m_state_manager.processRequests();
+    restartClock();
 }
 
-sf::Time Game::GetElapsed() {
+sf::Time Game::getElapsed() {
     return m_elapsed;
 }
 
-void Game::RestartClock() {
+void Game::restartClock() {
     m_elapsed = m_clock.restart();
 }
