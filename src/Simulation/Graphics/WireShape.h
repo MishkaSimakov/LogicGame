@@ -31,13 +31,13 @@ public:
     void dragTo(const sf::Vector2f &position);
 
 protected:
+    sf::Vector2f m_start;
+    sf::Vector2f m_end;
+
     ConnectorShape *m_start_connector{nullptr};
     ConnectorShape *m_end_connector{nullptr};
 
     sf::VertexArray m_shape;
-
-    sf::Vector2f m_start;
-    sf::Vector2f m_end;
 };
 
 

@@ -3,7 +3,11 @@
 
 LevelState::LevelState(StateManager *stateManager) :
         BaseState(stateManager),
-        m_simulation_manager(stateManager->getContext()),
+        m_simulation_manager(
+                stateManager->getContext(),
+                ResourceHolder::get().levels.get("1").getInputsCount(),
+                ResourceHolder::get().levels.get("1").getOutputsCount()
+        ),
         m_components_block(
                 {m_documentation_block_width + 25, 1080 - 120 - 25},
                 {
@@ -85,5 +89,11 @@ void LevelState::handleMousePressed(const sf::Event &event) {
 }
 
 void LevelState::startSimulation(const sf::Event &event) {
-    m_simulation_manager.startSimulation();
+    std::cout << "starting simulation..." << std::endl;
+
+    bool *test = ResourceHolder::get().levels.get("1").getTests()[2];
+
+    std::cout << "using test: " << test[0] << test[1] << test[2] << test[3] << test[4] << test[5] << std::endl;
+
+    std::cout << "result: " << m_simulation_manager.runSimulationTest(test) << std::endl;
 }

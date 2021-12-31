@@ -22,9 +22,7 @@ void StaticComponentsBlock::draw() {
 
 void StaticComponentsBlock::addStaticComponent(const BaseLogicalComponent *data) {
     m_components.push_back(
-            std::move(
-                    std::make_unique<StaticLogicalComponent>(nextComponentPosition(), data)
-            )
+            std::make_unique<StaticLogicalComponent>(nextComponentPosition(), data)
     );
 }
 
@@ -38,7 +36,8 @@ sf::Vector2f StaticComponentsBlock::nextComponentPosition() {
            );
 }
 
-std::optional<std::pair<const BaseLogicalComponent *, sf::Vector2f>> StaticComponentsBlock::getClickedComponentData(const sf::Vector2f &position) {
+std::optional<std::pair<const BaseLogicalComponent *, sf::Vector2f>>
+StaticComponentsBlock::getClickedComponentData(const sf::Vector2f &position) {
     for (auto &component: m_components) {
         if (component->getShape()->checkClick(position)) {
             return std::make_pair(component->getData(), position - component->getShape()->getPosition());

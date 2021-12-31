@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 namespace Resources {
@@ -10,35 +11,110 @@ namespace Resources {
     public:
         LevelResource() = default;
 
-        const std::wstring &getTitle() const {
-            return title;
+        // TODO: add memory cleaning after end
+
+        [[nodiscard]] const std::wstring &getTitle() const {
+            return m_title;
         }
 
-        const std::wstring &getDescription() const {
-            return description;
+        [[nodiscard]] const std::wstring &getDescription() const {
+            return m_description;
         }
 
-        bool loadFromFile(const std::string& filename) {
+        bool loadFromFile(const std::string &filename) {
             std::wifstream file;
             file.open(filename);
 
             if (!file.is_open())
                 return false;
 
-            std::getline(file, title);
-            std::getline(file, description);
+            readTitle(file);
+            readDescription(file);
+            readInputsOutputsCount(file);
+            readTests(file);
+
+            for (bool *test: m_tests) {
+                for (int i = 0; i < m_inputs_count + m_outputs_count; ++i) {
+                    std::cout << test[i] << " ";
+                }
+
+                std::cout << std::endl;
+            }
 
             file.close();
-
-            title = sf::String::fromUtf8(title.begin(), title.end());
-            description = sf::String::fromUtf8(description.begin(), description.end());
 
             return true;
         }
 
+        [[nodiscard]] int getInputsCount() const {
+            return m_inputs_count;
+        }
+
+        [[nodiscard]] int getOutputsCount() const {
+            return m_outputs_count;
+        }
+
+        [[nodiscard]] const std::vector<bool *> &getTests() const {
+            return m_tests;
+        }
+
     protected:
-        std::wstring title;
-        std::wstring description;
+        void readTitle(std::wifstream &file) {
+            std::getline(file, m_title);
+            m_title = sf::String::fromUtf8(m_title.begin(), m_title.end());
+        }
+
+        void readDescription(std::wifstream &file) {
+            std::wstring temp;
+            std::getline(file, temp);
+
+            while (temp != m_end_description_code) {
+                m_description += temp + L'\n';
+
+                std::getline(file, temp);
+            }
+
+            m_description = sf::String::fromUtf8(m_description.begin(), m_description.end());
+        }
+
+        void readInputsOutputsCount(std::wifstream &file) {
+            std::wstring temp;
+
+            std::getline(file, temp, L' ');
+            m_inputs_count = std::stoi(temp);
+
+            std::getline(file, temp, L'\n');
+            m_outputs_count = std::stoi(temp);
+        }
+
+        void readTests(std::wifstream &file) {
+            std::wstring temp;
+
+            while (file.peek() != EOF) {
+                std::getline(file, temp);
+
+                bool *ptr = new bool[m_inputs_count + m_outputs_count];
+
+                int i = 0;
+                for (wchar_t c: temp) {
+                    if (c != L' ') {
+                        ptr[i] = c == L'1';
+                        ++i;
+                    }
+                }
+
+                m_tests.push_back(ptr);
+            }
+        }
+
+        const std::wstring m_end_description_code{L"#description_end"};
+
+        std::wstring m_title;
+        std::wstring m_description;
+        int m_inputs_count{0};
+        int m_outputs_count{0};
+
+        std::vector<bool *> m_tests;
     };
 }
 

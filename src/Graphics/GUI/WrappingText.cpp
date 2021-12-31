@@ -40,6 +40,9 @@ void WrappingText::parseContent() {
             current_width += current_word_length;
             current_word_length = 0;
             last_whitespace_position = i;
+        } else if (m_content[i] == '\n') {
+            current_word_length = 0;
+            current_width = 0;
         }
 
         current_word_length += m_text.getFont()->getGlyph(m_content[i], m_font_size, false).advance + letterSpacing;

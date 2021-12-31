@@ -16,6 +16,7 @@ void ActingLogicalComponent::processInputs() {
     }
 
     std::vector<bool> outputs;
+
     outputs.reserve(m_logical_component_data->getOutputsCount());
 
     m_logical_component_data->processInput(&inputs, &outputs);

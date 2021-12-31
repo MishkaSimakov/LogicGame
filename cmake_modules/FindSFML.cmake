@@ -20,7 +20,7 @@
 # you must set the SFML_STATIC_LIBRARIES variable to TRUE before calling find_package(SFML ...).
 # Since you have to link yourself all the SFML dependencies when you link it statically, the following
 # additional variables are defined: SFML_XXX_DEPENDENCIES and SFML_DEPENDENCIES (see their detailed
-# description below).
+# m_description below).
 # In case of static linking, the SFML_STATIC macro will also be defined by this script.
 # example:
 #   set(SFML_STATIC_LIBRARIES TRUE)

@@ -38,6 +38,8 @@ public:
     }
 
 protected:
+    Connector *m_connector;
+
     float m_radius{10.f};
     sf::Vector2f m_position;
     sf::CircleShape m_shape;
@@ -45,8 +47,6 @@ protected:
     std::vector<WireShape *> m_connected_wires;
 
     bool m_is_simulation_connector;
-
-    Connector *m_connector;
 };
 
 

@@ -5,13 +5,12 @@
 
 class Or : public BaseLogicalComponent {
 public:
-    Or() : BaseLogicalComponent(L"ИЛИ", "LogicalComponents/or", 2, 5) {}
+    Or() : BaseLogicalComponent(L"ИЛИ", "LogicalComponents/or", 2, 1) {}
 
     void processInput(const std::vector<bool> *input, std::vector<bool> *output) const override {
         assert(getInputsCount() == input->size());
-        assert(getOutputsCount() == input->size());
 
-        output->at(0) = input->at(0) && input->at(1);
+        output->insert(output->begin(), input->at(0) || input->at(1));
     }
 };
 

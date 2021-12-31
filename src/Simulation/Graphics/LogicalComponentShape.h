@@ -47,11 +47,11 @@ public:
     bool checkClick(const sf::Vector2f &position);
 
 protected:
-    const sf::Texture *m_texture;
-    sf::RectangleShape m_shape;
-
     const sf::Vector2f m_size;
     sf::Vector2f m_position;
+
+    const sf::Texture *m_texture;
+    sf::RectangleShape m_shape;
 };
 
 

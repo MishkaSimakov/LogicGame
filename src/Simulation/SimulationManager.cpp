@@ -1,9 +1,9 @@
 #include "SimulationManager.h"
 
-SimulationManager::SimulationManager(SharedContext *sharedContext) : m_shared_context(sharedContext) {
-    int inputs_count = 4;
-    int outputs_count = 4;
-
+SimulationManager::SimulationManager(SharedContext *sharedContext, int inputs_count, int outputs_count) :
+        m_shared_context(sharedContext),
+        m_inputs_count(inputs_count),
+        m_outputs_count(outputs_count) {
     m_connectors.reserve(inputs_count + outputs_count);
 
     m_simulation_inputs.reserve(inputs_count);
@@ -21,10 +21,6 @@ SimulationManager::SimulationManager(SharedContext *sharedContext) : m_shared_co
 
         connector->getShape()->setPosition({900.f + (float) i * 100.f, 700.f});
     }
-
-    for (int i = 0; i < outputs_count; ++i) {
-        m_simulation_outputs[i]->setValue(true);
-    }
 }
 
 void SimulationManager::draw() {
@@ -34,9 +30,7 @@ void SimulationManager::draw() {
 }
 
 void SimulationManager::update() {
-    if (m_simulation_running) {
-        doSimulationStep();
-    }
+
 }
 
 void SimulationManager::doSimulationStep() {
@@ -53,10 +47,6 @@ void SimulationManager::doSimulationStep() {
     }
 
     if (temp.empty()) {
-        for (Connector *input: m_simulation_inputs) {
-            std::cout << input->getValue() << std::endl;
-        }
-
         stopSimulation();
         return;
     }
@@ -187,6 +177,7 @@ void SimulationManager::releaseWire() {
 
             // connect connectors one to other and vice versa
             dragged_wire_origin->addConnection(connector.get());
+            connector->addConnection(dragged_wire_origin);
 
             m_dragged_wire = nullptr;
 
@@ -225,4 +216,22 @@ void SimulationManager::startSimulation() {
     m_simulation_running = true;
 
     m_current_connectors = m_simulation_outputs;
+}
+
+bool SimulationManager::runSimulationTest(bool *test) {
+    for (int i = 0; i < m_outputs_count; ++i) {
+        m_simulation_outputs[i]->setValue(test[i]);
+    }
+
+    startSimulation();
+
+    while (m_simulation_running)
+        doSimulationStep();
+
+    for (int i = 0; i < m_inputs_count; ++i) {
+        if (m_simulation_inputs[i]->getValue() != test[m_outputs_count + i])
+            return false;
+    }
+
+    return true;
 }

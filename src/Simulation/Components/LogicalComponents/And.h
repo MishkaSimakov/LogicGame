@@ -10,7 +10,7 @@ public:
     void processInput(const std::vector<bool> *input, std::vector<bool> *output) const override {
         assert(getInputsCount() == input->size());
 
-        output->insert(output->cbegin(), input->at(0) && input->at(1));
+        output->insert(output->begin(), input->at(0) && input->at(1));
     }
 };
 
