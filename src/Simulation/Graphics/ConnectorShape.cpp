@@ -2,10 +2,16 @@
 #include "WireShape.h"
 
 void ConnectorShape::update() {
+    if (m_is_simulation_connector) {
+        m_radius += 10.f;
+    }
+
     m_shape.setOrigin(m_radius, m_radius);
+
     m_shape.setRadius(m_radius);
+    m_shape.setFillColor(m_is_simulation_connector ? sf::Color::Green : sf::Color::Red);
+
     m_shape.setPosition(m_position);
-    m_shape.setFillColor(sf::Color::Red);
 
     for (auto wire: m_connected_wires) {
         wire->update();

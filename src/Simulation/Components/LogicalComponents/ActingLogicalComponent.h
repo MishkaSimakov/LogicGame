@@ -14,7 +14,7 @@
 class ActingLogicalComponent {
 public:
     ActingLogicalComponent(
-            const sf::Vector2f &position, const BaseLogicalComponent &logical_component_data
+            const sf::Vector2f &position, const BaseLogicalComponent *logical_component_data
     );
 
     // get values from input connectors and send result to output connectors
@@ -43,7 +43,7 @@ protected:
     std::vector<Connector *> m_outputs;
 
     // Logical component data
-    const BaseLogicalComponent m_logical_component_data;
+    const BaseLogicalComponent *m_logical_component_data;
 
     // object that store all graphical data and handle graphical events for logical component
     LogicalComponentShape m_shape;

@@ -5,19 +5,24 @@
 #include <cmath>
 #include "ConnectorShape.h"
 
+class ActingLogicalComponent;
+
 class Connector {
 public:
     enum class Type {
-        INPUT = 0,
+        INPUT,
         OUTPUT
     };
 
-    explicit Connector(Type type) : m_type(type), m_shape(this) {};
+    explicit Connector(Type type, bool is_simulation_connector = false, ActingLogicalComponent *component = nullptr) :
+            m_type(type), m_shape(this, is_simulation_connector), m_component(component) {};
 
-    void addConnection(const Connector *connector);
-    void removeConnection(const Connector *connector);
+    void addConnection(Connector *connector);
+
+    void removeConnection(Connector *connector);
 
     bool canConnectWire(const Connector *connector);
+
     bool canProduceWire();
 
     Type getType() const {
@@ -36,13 +41,23 @@ public:
         return &m_shape;
     }
 
+    std::vector<Connector *> &getConnections() {
+        return m_connections;
+    }
+
+    ActingLogicalComponent *getComponent() const {
+        return m_component;
+    }
+
 protected:
     Type m_type;
-    bool m_value {false};
+    bool m_value{false};
 
     ConnectorShape m_shape;
 
-    std::vector<const Connector *> m_connections;
+    std::vector<Connector *> m_connections;
+
+    ActingLogicalComponent *m_component;
 };
 
 #endif //LOGICGAMEENGINE_CONNECTOR_H

@@ -5,8 +5,18 @@ LevelState::LevelState(StateManager *stateManager) :
         BaseState(stateManager),
         m_simulation_manager(stateManager->getContext()),
         m_components_block(
-                {500, 1080 - 120 - 25},
-                {750, 120},
+                {m_documentation_block_width + 25, 1080 - 120 - 25},
+                {
+                        (float) stateManager->getContext()->m_wind->getRenderWindow()->getSize().x -
+                        m_documentation_block_width - 25 * 2, 120
+                },
+                stateManager->getContext()
+        ),
+        m_documentation_block(
+                ResourceHolder::get().levels.get("1").getTitle(),
+                ResourceHolder::get().levels.get("1").getDescription(),
+                {m_documentation_block_width,
+                 (float) stateManager->getContext()->m_wind->getRenderWindow()->getSize().y},
                 stateManager->getContext()
         ) {
     stateManager->getContext()->m_eventManager->addMouseReleasedCallback(
@@ -23,7 +33,13 @@ LevelState::LevelState(StateManager *stateManager) :
             &LevelState::handleMousePressed, this
     );
 
-    m_components_block.addStaticComponent(And());
+    stateManager->getContext()->m_eventManager->addKeyPressedCallback(
+            StateType::Level, sf::Keyboard::Space,
+            &LevelState::startSimulation, this
+    );
+
+    m_components_block.addStaticComponent(&m_and_data);
+    m_components_block.addStaticComponent(&m_or_data);
 }
 
 void LevelState::onCreate() {
@@ -49,6 +65,7 @@ void LevelState::update(const sf::Time &time) {
 void LevelState::draw() {
     m_simulation_manager.draw();
     m_components_block.draw();
+    m_documentation_block.draw();
 }
 
 void LevelState::handleMousePressed(const sf::Event &event) {
@@ -65,4 +82,8 @@ void LevelState::handleMousePressed(const sf::Event &event) {
     }
 
     m_simulation_manager.handleMousePressed(event);
+}
+
+void LevelState::startSimulation(const sf::Event &event) {
+    m_simulation_manager.startSimulation();
 }

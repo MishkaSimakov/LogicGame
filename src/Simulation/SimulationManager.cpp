@@ -1,6 +1,31 @@
 #include "SimulationManager.h"
 
-SimulationManager::SimulationManager(SharedContext *sharedContext) : m_shared_context(sharedContext) {}
+SimulationManager::SimulationManager(SharedContext *sharedContext) : m_shared_context(sharedContext) {
+    int inputs_count = 4;
+    int outputs_count = 4;
+
+    m_connectors.reserve(inputs_count + outputs_count);
+
+    m_simulation_inputs.reserve(inputs_count);
+    for (int i = 0; i < inputs_count; ++i) {
+        auto &connector = m_connectors.emplace_back(std::make_unique<Connector>(Connector::Type::INPUT, true));
+        m_simulation_inputs.push_back(connector.get());
+
+        connector->getShape()->setPosition({900.f + (float) i * 100.f, 100.f});
+    }
+
+    m_simulation_outputs.reserve(outputs_count);
+    for (int i = 0; i < outputs_count; ++i) {
+        auto &connector = m_connectors.emplace_back(std::make_unique<Connector>(Connector::Type::OUTPUT, true));
+        m_simulation_outputs.push_back(connector.get());
+
+        connector->getShape()->setPosition({900.f + (float) i * 100.f, 700.f});
+    }
+
+    for (int i = 0; i < outputs_count; ++i) {
+        m_simulation_outputs[i]->setValue(true);
+    }
+}
 
 void SimulationManager::draw() {
     drawLogicalComponents();
@@ -9,19 +34,42 @@ void SimulationManager::draw() {
 }
 
 void SimulationManager::update() {
-    //doSimulationStep();
-}
-
-void SimulationManager::doSimulationStep() {
-    updateCurrentLogicalComponents();
-
-    for (auto logical_component: m_current_logical_components) {
-        logical_component->processInputs();
+    if (m_simulation_running) {
+        doSimulationStep();
     }
 }
 
-void SimulationManager::updateCurrentLogicalComponents() {
+void SimulationManager::doSimulationStep() {
+    std::unordered_set<ActingLogicalComponent *> temp;
 
+    for (Connector *connector: m_current_connectors) {
+        for (Connector *next_connector: connector->getConnections()) {
+            next_connector->setValue(connector->getValue());
+
+            if (ActingLogicalComponent *component = next_connector->getComponent()) {
+                temp.insert(component);
+            }
+        }
+    }
+
+    if (temp.empty()) {
+        for (Connector *input: m_simulation_inputs) {
+            std::cout << input->getValue() << std::endl;
+        }
+
+        stopSimulation();
+        return;
+    }
+
+    m_current_connectors.clear();
+    for (ActingLogicalComponent *component: temp) {
+        component->processInputs();
+
+        m_current_connectors.reserve(component->getOutputs().size());
+        for (Connector *output: component->getOutputs()) {
+            m_current_connectors.push_back(output);
+        }
+    }
 }
 
 void SimulationManager::drawLogicalComponents() {
@@ -58,7 +106,7 @@ void SimulationManager::handleMousePressed(const sf::Event &event) {
         }
     }
 
-//    for ()
+//    TODO: add wires dragging
 }
 
 void SimulationManager::handleMouseReleased(const sf::Event &event) {
@@ -71,7 +119,8 @@ void SimulationManager::handleMouseMove(const sf::Event &event) {
     else if (m_dragged_wire) dragWire();
 }
 
-void SimulationManager::addLogicalComponent(const sf::Vector2f &drag_origin, const BaseLogicalComponent &logical_component_data) {
+void SimulationManager::addLogicalComponent(const sf::Vector2f &drag_origin,
+                                            const BaseLogicalComponent *logical_component_data) {
     auto &component = m_logical_components.emplace_back(
             std::make_unique<ActingLogicalComponent>(getMousePosition(), logical_component_data)
     );
@@ -150,7 +199,7 @@ void SimulationManager::releaseWire() {
     dragged_wire_origin->getShape()->removeConnection(m_dragged_wire);
 
     // remove wire from m_wires vector
-    for (auto itr = m_wires.begin(); itr != m_wires.end(); itr++) {
+    for (auto itr = m_wires.cbegin(); itr != m_wires.cend(); itr++) {
         if (itr->get() == m_dragged_wire) {
             m_wires.erase(itr);
 
@@ -169,5 +218,11 @@ void SimulationManager::grabComponent(ActingLogicalComponent *component) {
 }
 
 sf::Vector2f SimulationManager::getMousePosition() {
-    return (sf::Vector2f) sf::Mouse::getPosition(*(m_shared_context->m_wind->getRenderWindow()));
+    return sf::Vector2f(sf::Mouse::getPosition(*(m_shared_context->m_wind->getRenderWindow())));
+}
+
+void SimulationManager::startSimulation() {
+    m_simulation_running = true;
+
+    m_current_connectors = m_simulation_outputs;
 }

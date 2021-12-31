@@ -12,7 +12,7 @@ public:
     BaseLogicalComponent(std::wstring name, std::string texture, int inputs_count, int outputs_count) :
         m_name(std::move(name)), m_texture(std::move(texture)), m_inputs_count(inputs_count), m_outputs_count(outputs_count) {}
 
-    virtual void processInput(const std::vector<bool> *input, std::vector<bool> *output) const {};
+    virtual void processInput(const std::vector<bool> *input, std::vector<bool> *output) const = 0;
 
     inline const std::wstring &getName() const {
         return m_name;

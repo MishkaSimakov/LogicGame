@@ -1,0 +1,30 @@
+#ifndef LOGICGAMEENGINE_WRAPPINGTEXT_H
+#define LOGICGAMEENGINE_WRAPPINGTEXT_H
+
+#include "ResourceHolder.h"
+#include <string>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+class WrappingText : public sf::Drawable {
+public:
+    WrappingText(
+            sf::Vector2f position, float max_width, std::wstring content,
+            int font_size = 20, const std::string &font_name = "arial", sf::Uint32 style = sf::Text::Regular
+    );
+
+private:
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+protected:
+    void parseContent();
+
+    sf::Text m_text;
+
+    std::wstring m_content;
+    int m_font_size;
+    float m_max_width;
+};
+
+
+#endif //LOGICGAMEENGINE_WRAPPINGTEXT_H

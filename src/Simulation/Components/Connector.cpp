@@ -1,6 +1,6 @@
 #include "Connector.h"
 
-void Connector::removeConnection(const Connector *connector) {
+void Connector::removeConnection(Connector *connector) {
     auto itr = std::find(m_connections.begin(), m_connections.end(), connector);
 
     if (itr == m_connections.end()) return;
@@ -8,7 +8,7 @@ void Connector::removeConnection(const Connector *connector) {
     m_connections.erase(itr);
 }
 
-void Connector::addConnection(const Connector *connector) {
+void Connector::addConnection(Connector *connector) {
     m_connections.push_back(connector);
 }
 

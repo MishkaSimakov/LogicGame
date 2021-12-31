@@ -2,12 +2,14 @@
 #define LOGICGAMEENGINE_SIMULATIONMANAGER_H
 
 #include "SharedContext.h"
-#include "ActingLogicalComponent.h"
 #include "Connector.h"
+#include "BaseLogicalComponent.h"
+#include "ActingLogicalComponent.h"
 #include "WireShape.h"
 
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 class SimulationManager {
 public:
@@ -23,7 +25,13 @@ public:
 
     void handleMouseMove(const sf::Event &event);
 
-    void addLogicalComponent(const sf::Vector2f &drag_origin, const BaseLogicalComponent &logical_component_data);
+    void addLogicalComponent(const sf::Vector2f &drag_origin, const BaseLogicalComponent *logical_component_data);
+
+    void startSimulation();
+
+    void stopSimulation() { m_simulation_running = false; };
+
+    bool isSimulationRunning() const { return m_simulation_running; };
 
 protected:
     sf::Vector2f getMousePosition();
@@ -31,8 +39,6 @@ protected:
     void doSimulationStep();
 
     void startWireFrom(Connector *connector);
-
-    void updateCurrentLogicalComponents();
 
     void drawLogicalComponents();
 
@@ -53,13 +59,18 @@ protected:
 
     sf::Vector2f m_drag_origin;
 
-    std::vector<ActingLogicalComponent *> m_current_logical_components;
+    std::vector<Connector *> m_current_connectors;
 
     std::vector<std::unique_ptr<ActingLogicalComponent>> m_logical_components;
     std::vector<std::unique_ptr<Connector>> m_connectors;
     std::vector<std::unique_ptr<WireShape>> m_wires;
 
+    std::vector<Connector *> m_simulation_inputs;
+    std::vector<Connector *> m_simulation_outputs;
+
     SharedContext *m_shared_context;
+
+    bool m_simulation_running {false};
 };
 
 

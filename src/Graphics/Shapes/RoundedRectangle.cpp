@@ -1,4 +1,3 @@
-#include <iostream>
 #include "RoundedRectangle.h"
 
 RoundedRectangle::RoundedRectangle(

@@ -5,11 +5,14 @@
 #include <SFML/Graphics.hpp>
 
 class Connector;
+
 class WireShape;
 
 class ConnectorShape {
 public:
-    explicit ConnectorShape(Connector *connector): m_connector(connector) {};
+    explicit ConnectorShape(Connector *connector, bool is_simulation_connector) :
+            m_connector(connector),
+            m_is_simulation_connector(is_simulation_connector) {};
 
     void update();
 
@@ -22,6 +25,7 @@ public:
     }
 
     void addConnection(WireShape *wire);
+
     void removeConnection(WireShape *wire);
 
     void setPosition(const sf::Vector2f &position) {
@@ -34,11 +38,13 @@ public:
     }
 
 protected:
-    float m_radius {10.f};
+    float m_radius{10.f};
     sf::Vector2f m_position;
     sf::CircleShape m_shape;
 
     std::vector<WireShape *> m_connected_wires;
+
+    bool m_is_simulation_connector;
 
     Connector *m_connector;
 };

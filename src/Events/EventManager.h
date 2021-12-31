@@ -12,7 +12,7 @@
 using EventCallback = std::function<void(const sf::Event &event)>;
 
 template<typename T>
-using EventCallbackMap = std::unordered_map<T, EventCallback>;
+using EventCallbackMap = std::unordered_map<T, std::vector<EventCallback>>;
 
 enum class StateType;
 
@@ -42,12 +42,12 @@ public:
 
     template<class T1>
     void addCallback(StateType state, const T &sub_value, void(T1::*func)(const sf::Event &), T1 *instance) {
-        m_callbacks[state][sub_value] = std::bind(func, instance, std::placeholders::_1);
+        m_callbacks[state][sub_value].push_back(std::move(std::bind(func, instance, std::placeholders::_1)));
     }
 
 private:
     void executeCallback(StateType state, const T &sub_value, const sf::Event &event) const {
-        auto event_callbacks_itr(m_callbacks.find(state));
+        auto event_callbacks_itr{m_callbacks.find(state)};
         if (event_callbacks_itr == m_callbacks.end()) {
             return;
         }
@@ -58,7 +58,9 @@ private:
             return;
         }
 
-        callback_itr->second(event);
+        for (auto &callback: callback_itr->second) {
+            callback(event);
+        }
     }
 
     Callbacks<T> m_callbacks;
@@ -103,7 +105,7 @@ public:
         executeCallback(StateType(0), event);
     }
 
-    void setCurrentState(StateType state) {
+    void setCurrentState(StateType &state) {
         m_current_state = state;
     }
 
@@ -111,7 +113,7 @@ public:
     template<class T1>
     void
     addEventCallback(StateType state, sf::Event::EventType type, void(T1::*func)(const sf::Event &), T1 *instance) {
-        m_events_callbacks[state][type] = std::bind(func, instance, std::placeholders::_1);
+        m_events_callbacks[state][type].push_back(std::move(std::bind(func, instance, std::placeholders::_1)));
     }
 
     // Adds a key pressed callback
@@ -172,7 +174,9 @@ private:
             return;
         }
 
-        callback_itr->second(e);
+        for (auto &callback: callback_itr->second) {
+            callback(e);
+        }
     }
 
     SubTypeManager<sf::Keyboard::Key> m_key_pressed_manager;

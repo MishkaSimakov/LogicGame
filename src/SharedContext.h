@@ -1,8 +1,8 @@
 #ifndef LOGICGAMEENGINE_SHAREDCONTEXT_H
 #define LOGICGAMEENGINE_SHAREDCONTEXT_H
 
-#include "Window.h"
-#include "EventManager.h"
+class Window;
+class EventManager;
 
 struct SharedContext {
     SharedContext() : m_wind(nullptr), m_eventManager(nullptr) {}
