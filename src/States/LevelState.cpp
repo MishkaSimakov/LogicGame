@@ -55,15 +55,14 @@ void LevelState::onDestroy() {
 }
 
 void LevelState::activate() {
-
 }
 
 void LevelState::deactivate() {
-
 }
 
 void LevelState::update(const sf::Time &time) {
     m_simulation_manager.update();
+    m_documentation_block.update(time);
 }
 
 void LevelState::draw() {
@@ -91,9 +90,9 @@ void LevelState::handleMousePressed(const sf::Event &event) {
 void LevelState::startSimulation(const sf::Event &event) {
     std::cout << "starting simulation..." << std::endl;
 
-    bool *test = ResourceHolder::get().levels.get("1").getTests()[2];
+    for (bool *test: ResourceHolder::get().levels.get("1").getTests()) {
+        std::cout << "using test: " << test[0] << test[1] << test[2] << test[3] << test[4] << test[5] << std::endl;
 
-    std::cout << "using test: " << test[0] << test[1] << test[2] << test[3] << test[4] << test[5] << std::endl;
-
-    std::cout << "result: " << m_simulation_manager.runSimulationTest(test) << std::endl;
+        std::cout << "result: " << m_simulation_manager.runSimulationTest(test) << std::endl;
+    }
 }

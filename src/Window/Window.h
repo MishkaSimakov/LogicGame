@@ -5,6 +5,7 @@
 
 #include "SFML/Graphics.hpp"
 #include <string>
+#include <TGUI/Backends/SFML/GuiSFML.hpp>
 
 class Window {
 public:
@@ -33,6 +34,10 @@ public:
 
     void close(const sf::Event &event);
 
+    tgui::GuiSFML *getGui() {
+        return &m_gui;
+    }
+
 private:
     void setup(const std::string &title, const sf::Vector2u &size);
 
@@ -47,6 +52,8 @@ private:
     bool m_is_fullscreen;
 
     EventManager m_event_manager;
+
+    tgui::GuiSFML m_gui;
 };
 
 

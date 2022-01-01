@@ -8,6 +8,8 @@
 #include "Or.h"
 #include "DocumentationBlock.h"
 
+#include <TGUI/TGUI.hpp>
+
 class LevelState : public BaseState {
 public:
     explicit LevelState(StateManager *stateManager);

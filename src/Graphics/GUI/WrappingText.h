@@ -13,11 +13,15 @@ public:
             int font_size = 20, const std::string &font_name = "arial", sf::Uint32 style = sf::Text::Regular
     );
 
+    void setPosition(const sf::Vector2f &position);
+
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 protected:
     void parseContent();
+
+    sf::Vector2f m_position;
 
     sf::Text m_text;
 

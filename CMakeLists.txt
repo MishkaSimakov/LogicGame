@@ -37,7 +37,10 @@ include_directories(${SFML_INCLUDE_DIR})
 
 
 # include TGUI
-#find_package(TGUI 0.9.2)
+find_package(TGUI 0.9.2)
+target_link_libraries(LogicGameEngine ${TGUI_LIBRARY} ${SFML_LIBRARIES})
+
+include_directories(${TGUI_INClUDE_DIR})
 
 file(GLOB BINARY_DEP_DLLS "${SFML_INCLUDE_DIR}/../lib/*.dll")
 file(COPY ${BINARY_DEP_DLLS} DESTINATION ${CMAKE_BINARY_DIR})
@@ -45,3 +48,4 @@ file(COPY ${BINARY_DEP_DLLS} DESTINATION ${CMAKE_BINARY_DIR})
 
 # Copy resources to build
 file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY themes DESTINATION ${CMAKE_BINARY_DIR})

@@ -5,7 +5,7 @@
 #include "StateManager.h"
 #include "Window.h"
 
-#include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 
 #include <memory>
 #include <vector>
@@ -30,6 +30,8 @@ private:
 
     sf::Clock m_clock;
     sf::Time m_elapsed;
+
+    tgui::GuiSFML m_gui;
 };
 
 #endif // GAME_H

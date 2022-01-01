@@ -6,6 +6,7 @@ WrappingText::WrappingText(
         sf::Vector2f position, float max_width, std::wstring content,
         int font_size, const std::string &font_name, sf::Uint32 style
 ) :
+        m_position(position),
         m_content(std::move(content)),
         m_font_size(font_size),
         m_max_width(max_width) {
@@ -17,7 +18,7 @@ WrappingText::WrappingText(
     parseContent();
 
     m_text.setString(m_content);
-    m_text.setPosition(position);
+    m_text.setPosition(m_position);
 }
 
 void WrappingText::parseContent() {
@@ -51,4 +52,10 @@ void WrappingText::parseContent() {
 
 void WrappingText::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(m_text);
+}
+
+void WrappingText::setPosition(const sf::Vector2f &position) {
+    m_position = position;
+
+    m_text.setPosition(position);
 }

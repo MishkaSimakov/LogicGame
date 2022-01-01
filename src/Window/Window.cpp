@@ -19,6 +19,9 @@ void Window::setup(const std::string &title, const sf::Vector2u &size) {
     m_event_manager.addKeyPressedCallback(StateType(0), sf::Keyboard::F5, &Window::toggleFullscreen, this);
 
     m_window.setFramerateLimit(60);
+
+    m_gui.setTarget(m_window);
+    tgui::Theme::setDefault("themes/TransparentGrey.txt");
 }
 
 void Window::create() {
@@ -37,6 +40,8 @@ void Window::update() {
     sf::Event event;
 
     while (m_window.pollEvent(event)) {
+        m_gui.handleEvent(event);
+
         m_event_manager.processEvent(event);
     }
 }
@@ -47,9 +52,14 @@ void Window::toggleFullscreen(const sf::Event &event) {
     create();
 }
 
-void Window::beginDraw() { m_window.clear(sf::Color::White); }
+void Window::beginDraw() {
+    m_window.clear(sf::Color::White);
+}
 
-void Window::endDraw() { m_window.display(); }
+void Window::endDraw() {
+    m_gui.draw();
+    m_window.display();
+}
 
 bool Window::isDone() const { return m_is_done; }
 
