@@ -22,6 +22,12 @@ LevelState::LevelState(StateManager *stateManager) :
                 {m_documentation_block_width,
                  (float) stateManager->getContext()->m_wind->getRenderWindow()->getSize().y},
                 stateManager->getContext()
+        ),
+        m_level_result_window(
+                stateManager->getContext(),
+                m_result_window_size,
+                ((sf::Vector2f) stateManager->getContext()->m_wind->getRenderWindow()->getSize() -
+                 m_result_window_size) / 2.f
         ) {
     stateManager->getContext()->m_eventManager->addMouseReleasedCallback(
             StateType::Level, sf::Mouse::Left,
@@ -69,6 +75,7 @@ void LevelState::draw() {
     m_simulation_manager.draw();
     m_components_block.draw();
     m_documentation_block.draw();
+    m_level_result_window.draw();
 }
 
 void LevelState::handleMousePressed(const sf::Event &event) {
@@ -88,11 +95,13 @@ void LevelState::handleMousePressed(const sf::Event &event) {
 }
 
 void LevelState::startSimulation(const sf::Event &event) {
-    std::cout << "starting simulation..." << std::endl;
+    int wrong_count = 0;
 
     for (bool *test: ResourceHolder::get().levels.get("1").getTests()) {
-        std::cout << "using test: " << test[0] << test[1] << test[2] << test[3] << test[4] << test[5] << std::endl;
-
-        std::cout << "result: " << m_simulation_manager.runSimulationTest(test) << std::endl;
+        if (!m_simulation_manager.runSimulationTest(test)) {
+            ++wrong_count;
+        }
     }
+
+    m_level_result_window.showWithResult(LevelResultWindow::LevelResult::SUCCESS);
 }

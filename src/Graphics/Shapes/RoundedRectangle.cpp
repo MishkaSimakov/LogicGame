@@ -1,7 +1,6 @@
 #include "RoundedRectangle.h"
 
 RoundedRectangle::RoundedRectangle(
-        const sf::Vector2f &position,
         const sf::Vector2f &size,
         float radius,
         unsigned char corners_to_round,
@@ -21,10 +20,10 @@ RoundedRectangle::RoundedRectangle(
         for (i = 0; i < points; ++i) {
             x += radius / (float) points;
             y = std::sqrt(radius * radius - x * x);
-            m_vertices.emplace_back(x + position.x + size.x - radius, position.y - y + radius);
+            m_vertices.emplace_back(x + size.x - radius, -y + radius);
         }
     } else {
-        m_vertices.emplace_back(position.x + size.x, position.y);
+        m_vertices.emplace_back(size.x, 0);
     }
 
     if (corners_to_round & BOTTOM_RIGHT) {
@@ -32,10 +31,10 @@ RoundedRectangle::RoundedRectangle(
         for (i = 0; i < points; ++i) {
             y += radius / (float) points;
             x = std::sqrt(radius * radius - y * y);
-            m_vertices.emplace_back(position.x + size.x + x - radius, position.y + size.y - radius + y);
+            m_vertices.emplace_back(size.x + x - radius, size.y - radius + y);
         }
     } else {
-        m_vertices.emplace_back(position.x + size.x, position.y + size.y);
+        m_vertices.emplace_back(size.x, size.y);
     }
 
     if (corners_to_round & BOTTOM_LEFT) {
@@ -43,10 +42,10 @@ RoundedRectangle::RoundedRectangle(
         for (i = 0; i < points; ++i) {
             x += radius / (float) points;
             y = std::sqrt(radius * radius - x * x);
-            m_vertices.emplace_back(position.x + radius - x, position.y + size.y - radius + y);
+            m_vertices.emplace_back(radius - x, size.y - radius + y);
         }
     } else {
-        m_vertices.emplace_back(position.x, position.y + size.y);
+        m_vertices.emplace_back(0, size.y);
     }
 
     if (corners_to_round & TOP_LEFT) {
@@ -54,10 +53,10 @@ RoundedRectangle::RoundedRectangle(
         for (i = 0; i < points; ++i) {
             y += radius / (float) points;
             x = std::sqrt(radius * radius - y * y);
-            m_vertices.emplace_back(position.x - x + radius, position.y + radius - y);
+            m_vertices.emplace_back(-x + radius, radius - y);
         }
     } else {
-        m_vertices.emplace_back(position.x, position.y);
+        m_vertices.emplace_back(0, 0);
     }
 
     update();

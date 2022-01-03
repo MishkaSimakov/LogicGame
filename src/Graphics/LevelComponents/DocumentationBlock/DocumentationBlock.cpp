@@ -1,11 +1,12 @@
 #include "DocumentationBlock.h"
+#include "StateManager.h"
 
 DocumentationBlock::DocumentationBlock(
         const std::wstring &title, const std::wstring &description,
         const sf::Vector2f &size, SharedContext *sharedContext
 ) :
         m_background(
-                {0, 0}, size, 18,
+                size, 18,
                 RoundedRectangle::BOTTOM_RIGHT | RoundedRectangle::TOP_RIGHT
         ),
         m_title(m_offset, size.x - m_offset.x * 2, title, 40, "arial", sf::Text::Bold),
@@ -13,7 +14,9 @@ DocumentationBlock::DocumentationBlock(
         m_shared_context(sharedContext),
         m_hide_btn(tgui::BitmapButton::create()),
         m_show_btn(tgui::BitmapButton::create()),
-        m_position(size.x), m_opened_position(size.x) {
+        m_position(size.x), m_opened_position(size.x),
+        m_button(m_shared_context, {200, 50}, {100, 100}, L"Test", StateType::Level) {
+    m_background.setPosition(0, 0);
     m_background.setFillColor(sf::Color(220, 220, 220));
     m_background.setOutlineColor(sf::Color(240, 240, 240));
     m_background.setOutlineThickness(1);
@@ -29,6 +32,7 @@ DocumentationBlock::DocumentationBlock(
     m_hide_btn->setSize(40, 40);
     m_hide_btn->setImageScaling(1);
 
+
     updatePositions();
 
     m_shared_context->m_wind->getGui()->add(m_show_btn);
@@ -40,6 +44,9 @@ void DocumentationBlock::draw() {
         m_shared_context->m_wind->draw(m_background);
         m_shared_context->m_wind->draw(m_title);
         m_shared_context->m_wind->draw(m_description);
+
+
+        m_shared_context->m_wind->draw(m_button);
     }
 }
 

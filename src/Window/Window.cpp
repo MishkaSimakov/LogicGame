@@ -26,6 +26,7 @@ void Window::setup(const std::string &title, const sf::Vector2u &size) {
 
 void Window::create() {
     auto style = (m_is_fullscreen ? sf::Style::Fullscreen : sf::Style::Default);
+
     m_window.create(
             {m_window_size.x, m_window_size.y, 32},
             m_window_title, style

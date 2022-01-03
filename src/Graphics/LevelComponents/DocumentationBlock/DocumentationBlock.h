@@ -3,10 +3,11 @@
 
 
 #include "ResourceHolder.h"
-#include "WrappingText.h"
+#include "Graphics/WrappingText.h"
 #include "RoundedRectangle.h"
 #include "SharedContext.h"
 #include "Window.h"
+#include "Button.h"
 
 #include <string>
 #include <TGUI/TGUI.hpp>
@@ -47,6 +48,8 @@ private:
     tgui::BitmapButton::Ptr m_hide_btn;
     tgui::BitmapButton::Ptr m_show_btn;
 
+    tgui::Text m_text;
+
     enum class State {
         FIXED,
         CLOSING,
@@ -58,6 +61,8 @@ private:
     float m_position;
     float m_opened_position;
     sf::Int32 m_animation_time{0};
+
+    Button m_button;
 };
 
 

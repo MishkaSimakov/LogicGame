@@ -33,14 +33,6 @@ namespace Resources {
             readInputsOutputsCount(file);
             readTests(file);
 
-            for (bool *test: m_tests) {
-                for (int i = 0; i < m_inputs_count + m_outputs_count; ++i) {
-                    std::cout << test[i] << " ";
-                }
-
-                std::cout << std::endl;
-            }
-
             file.close();
 
             return true;

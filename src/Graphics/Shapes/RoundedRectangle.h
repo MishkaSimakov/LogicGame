@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iostream>
 
 class RoundedRectangle : public sf::Shape {
 public:
@@ -14,8 +15,7 @@ public:
         ALL = 15
     };
 
-    RoundedRectangle(
-            const sf::Vector2f &position,
+    explicit RoundedRectangle(
             const sf::Vector2f &size,
             float radius = 10.f,
             unsigned char corners_to_round = corners::ALL,

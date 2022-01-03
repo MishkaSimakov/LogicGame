@@ -6,7 +6,8 @@ StaticComponentsBlock::StaticComponentsBlock(
         SharedContext *sharedContext
 ) :
         m_position(position), m_size(size),
-        m_background(position, size, 18), m_shared_context(sharedContext) {
+        m_background(size, 18), m_shared_context(sharedContext) {
+    m_background.setPosition(position);
     m_background.setFillColor(sf::Color(220, 220, 220));
     m_background.setOutlineColor(sf::Color(240, 240, 240));
     m_background.setOutlineThickness(1);
