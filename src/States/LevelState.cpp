@@ -22,12 +22,6 @@ LevelState::LevelState(StateManager *stateManager) :
                 {m_documentation_block_width,
                  (float) stateManager->getContext()->m_wind->getRenderWindow()->getSize().y},
                 stateManager->getContext()
-        ),
-        m_level_result_window(
-                stateManager->getContext(),
-                m_result_window_size,
-                ((sf::Vector2f) stateManager->getContext()->m_wind->getRenderWindow()->getSize() -
-                 m_result_window_size) / 2.f
         ) {
     stateManager->getContext()->m_eventManager->addMouseReleasedCallback(
             StateType::Level, sf::Mouse::Left,
@@ -43,7 +37,7 @@ LevelState::LevelState(StateManager *stateManager) :
             &LevelState::handleMousePressed, this
     );
 
-    stateManager->getContext()->m_eventManager->addKeyPressedCallback(
+    stateManager->getContext()->m_eventManager->addKeyReleasedCallback(
             StateType::Level, sf::Keyboard::Space,
             &LevelState::startSimulation, this
     );
@@ -67,7 +61,7 @@ void LevelState::deactivate() {
 }
 
 void LevelState::update(const sf::Time &time) {
-    m_simulation_manager.update();
+    m_simulation_manager.update(time);
     m_documentation_block.update(time);
 }
 
@@ -75,13 +69,10 @@ void LevelState::draw() {
     m_simulation_manager.draw();
     m_components_block.draw();
     m_documentation_block.draw();
-    m_level_result_window.draw();
 }
 
 void LevelState::handleMousePressed(const sf::Event &event) {
-    sf::Vector2f mouse_pos{sf::Mouse::getPosition(
-            *m_stateManager->getContext()->m_wind->getRenderWindow()
-    )};
+    sf::Vector2f mouse_pos{m_stateManager->getContext()->m_wind->getMousePosition()};
 
     if (auto data = m_components_block.getClickedComponentData(mouse_pos)) {
         m_simulation_manager.addLogicalComponent(
@@ -103,5 +94,5 @@ void LevelState::startSimulation(const sf::Event &event) {
         }
     }
 
-    m_level_result_window.showWithResult(LevelResultWindow::LevelResult::SUCCESS);
+    m_stateManager->switchTo(StateType::LevelResult);
 }

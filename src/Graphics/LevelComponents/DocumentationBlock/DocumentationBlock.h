@@ -28,7 +28,7 @@ private:
 
     void hide();
 
-    float easeInOut(float a, float b, float t) {
+    static float easeInOut(float a, float b, float t) {
         if (t <= 0)
             return a;
         else if (t >= 1)
@@ -45,10 +45,8 @@ private:
 
     SharedContext *m_shared_context;
 
-    tgui::BitmapButton::Ptr m_hide_btn;
-    tgui::BitmapButton::Ptr m_show_btn;
-
-    tgui::Text m_text;
+    Button m_hide_btn;
+    Button m_show_btn;
 
     enum class State {
         FIXED,
@@ -61,8 +59,6 @@ private:
     float m_position;
     float m_opened_position;
     sf::Int32 m_animation_time{0};
-
-    Button m_button;
 };
 
 

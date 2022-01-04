@@ -6,8 +6,6 @@
 #include <functional>
 #include <utility>
 
-// Code had taken from https://github.com/johnBuffer/SFML-EventManager
-
 // Helper using for shorter types
 using EventCallback = std::function<void(const sf::Event &event)>;
 

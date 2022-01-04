@@ -3,6 +3,7 @@
 StateManager::StateManager(SharedContext *shared) : m_shared(shared) {
     registerState<MainMenuState>(StateType::MainMenu);
     registerState<LevelState>(StateType::Level);
+    registerState<LevelResultState>(StateType::LevelResult);
 }
 
 StateManager::~StateManager() {

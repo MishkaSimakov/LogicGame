@@ -9,6 +9,11 @@
 
 class Window {
 public:
+    enum class ViewType {
+        DEFAULT,
+        SIMULATION
+    };
+
     Window(const std::string &title, const sf::Vector2u &size);
 
     ~Window();
@@ -32,13 +37,25 @@ public:
 
     void toggleFullscreen(const sf::Event &event);
 
-    void close(const sf::Event &event);
+    void close();
+
+    void setWindowView(ViewType viewType);
+
+    void setView(ViewType viewType, sf::View view);
+
+    sf::View &getView(ViewType viewType);
 
     tgui::GuiSFML *getGui() {
         return &m_gui;
     }
 
+    sf::Vector2f getMousePosition(ViewType viewType = ViewType::DEFAULT);
+
+    sf::Vector2f getMousePosition(const sf::View &view);
+
 private:
+    void handleCloseEvent(const sf::Event &event);
+
     void setup(const std::string &title, const sf::Vector2u &size);
 
     void destroy();
@@ -54,6 +71,8 @@ private:
     EventManager m_event_manager;
 
     tgui::GuiSFML m_gui;
+
+    std::unordered_map<Window::ViewType, sf::View> m_views;
 };
 
 

@@ -7,6 +7,7 @@
 // game states
 #include "MainMenuState.h"
 #include "LevelState.h"
+#include "LevelResultState.h"
 
 #include "SharedContext.h"
 
@@ -15,7 +16,7 @@
 #include <functional>
 
 enum class StateType {
-    MainMenu = 1, Level, Paused
+    MainMenu = 1, Level, LevelResult
 };
 
 using StateContainer = std::vector<std::pair<StateType, BaseState *>>;

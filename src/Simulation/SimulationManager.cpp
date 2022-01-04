@@ -21,16 +21,50 @@ SimulationManager::SimulationManager(SharedContext *sharedContext, int inputs_co
 
         connector->getShape()->setPosition({900.f + (float) i * 100.f, 700.f});
     }
+
+    sf::View simulation_view;
+    simulation_view.setSize((sf::Vector2f) m_shared_context->m_wind->getWindowSize());
+    simulation_view.setCenter((sf::Vector2f) m_shared_context->m_wind->getWindowSize() / 2.f);
+    m_shared_context->m_wind->setView(Window::ViewType::SIMULATION, simulation_view);
 }
 
 void SimulationManager::draw() {
+    m_shared_context->m_wind->setWindowView(Window::ViewType::SIMULATION);
+
     drawLogicalComponents();
     drawWires();
     drawConnectors();
+
+    m_shared_context->m_wind->setWindowView(Window::ViewType::DEFAULT);
 }
 
-void SimulationManager::update() {
+void SimulationManager::update(sf::Time time) {
+    float movement_speed = 100.f;
+    float distance = time.asSeconds() * movement_speed;
+    float zoom_factor = 1.01f;
 
+//    std::cout << distance << std::endl;
+
+    sf::View &simulation_view = m_shared_context->m_wind->getView(Window::ViewType::SIMULATION);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        simulation_view.move({0, -distance});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        simulation_view.move({0, distance});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        simulation_view.move({-distance, 0});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        simulation_view.move({distance, 0});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+        simulation_view.zoom(zoom_factor);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+        simulation_view.zoom(1 / zoom_factor);
+    }
 }
 
 void SimulationManager::doSimulationStep() {
@@ -179,6 +213,8 @@ void SimulationManager::releaseWire() {
             dragged_wire_origin->addConnection(connector.get());
             connector->addConnection(dragged_wire_origin);
 
+            m_dragged_wire->update();
+
             m_dragged_wire = nullptr;
 
             return;
@@ -209,7 +245,7 @@ void SimulationManager::grabComponent(ActingLogicalComponent *component) {
 }
 
 sf::Vector2f SimulationManager::getMousePosition() {
-    return sf::Vector2f(sf::Mouse::getPosition(*(m_shared_context->m_wind->getRenderWindow())));
+    return m_shared_context->m_wind->getMousePosition(Window::ViewType::SIMULATION);
 }
 
 void SimulationManager::startSimulation() {

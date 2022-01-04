@@ -4,10 +4,10 @@ Game::Game() : m_window("Logic Game X", sf::Vector2u(1920, 1080)), m_state_manag
     m_context.m_wind = &m_window;
     m_context.m_eventManager = m_window.getEventManager();
 
-    m_state_manager.switchTo(StateType::Level);
+    m_state_manager.switchTo(StateType::MainMenu);
 }
 
-Game::~Game() {}
+Game::~Game() = default;
 
 Window *Game::getWindow() {
     return &m_window;

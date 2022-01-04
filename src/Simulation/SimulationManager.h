@@ -15,7 +15,7 @@ class SimulationManager {
 public:
     SimulationManager(SharedContext *sharedContext, int inputs_count, int outputs_count);
 
-    void update();
+    void update(sf::Time time);
 
     void draw();
 
@@ -79,6 +79,8 @@ protected:
     std::vector<Connector *> m_simulation_outputs;
 
     bool m_simulation_running{false};
+
+    sf::View m_simulation_view;
 };
 
 

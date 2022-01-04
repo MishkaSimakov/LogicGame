@@ -1,12 +1,14 @@
 #include "Button.h"
 
-#include <utility>
-#include "StateManager.h"
 
-Button::Button(SharedContext *sharedContext, const sf::Vector2f &size, const sf::Vector2f &position,
-               std::wstring string, StateType stateType) :
+Button::Button(
+        SharedContext *sharedContext, StateType stateType,
+        const sf::Vector2f &size, const sf::Vector2f &position,
+        std::wstring string
+) :
         m_shared_context(sharedContext), m_string(std::move(string)), m_position(position), m_size(size),
         m_background(m_size, 5.f) {
+
     m_shared_context->m_eventManager->addEventCallback(
             stateType, sf::Event::MouseMoved, &Button::handleMouseMove, this
     );
@@ -41,27 +43,26 @@ Button::Button(SharedContext *sharedContext, const sf::Vector2f &size, const sf:
 
 void Button::setString(const std::wstring &string) {
     m_string = string;
+    update();
 }
 
-void Button::setSize(const sf::Vector2f &size) {
-    m_size = size;
-}
+//void Button::setSize(const sf::Vector2f &size) {
+//    m_size = size;
+//    update();
+//}
 
 void Button::setFontSize(float font_size) {
 }
 
 void Button::setPosition(const sf::Vector2f &position) {
     m_position = position;
-}
-
-void Button::onClick() {
-    std::cout << "click!" << std::endl;
+    update();
 }
 
 void Button::handleMouseMove(const sf::Event &event) {
-    sf::Vector2f mouse_pos{sf::Mouse::getPosition(
-            *m_shared_context->m_wind->getRenderWindow()
-    )};
+    if (!m_is_visible || !m_is_enabled) return;
+
+    sf::Vector2f mouse_pos{m_shared_context->m_wind->getMousePosition()};
 
     if (m_background.getGlobalBounds().contains(mouse_pos)) {
         if (m_current_state == State::REGULAR) {
@@ -75,6 +76,8 @@ void Button::handleMouseMove(const sf::Event &event) {
 }
 
 void Button::handleMouseButtonPressed(const sf::Event &event) {
+    if (!m_is_visible || !m_is_enabled) return;
+
     if (m_current_state == State::HOVER) {
         m_current_state = State::ACTIVE;
         update();
@@ -82,13 +85,15 @@ void Button::handleMouseButtonPressed(const sf::Event &event) {
 }
 
 void Button::handleMouseButtonReleased(const sf::Event &event) {
+    if (!m_is_visible || !m_is_enabled) return;
+
     if (m_current_state == State::ACTIVE) {
-        sf::Vector2f mouse_pos{sf::Mouse::getPosition(
-                *m_shared_context->m_wind->getRenderWindow()
-        )};
+        sf::Vector2f mouse_pos{m_shared_context->m_wind->getMousePosition()};
 
         if (m_background.getGlobalBounds().contains(mouse_pos)) {
-            onClick();
+            if (m_on_click_callback) {
+                m_on_click_callback();
+            }
             m_current_state = State::HOVER;
         } else {
             m_current_state = State::REGULAR;
@@ -99,6 +104,8 @@ void Button::handleMouseButtonReleased(const sf::Event &event) {
 }
 
 void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (!m_is_visible) return;
+
     target.draw(m_background);
 
     if (!m_string.empty())
@@ -107,7 +114,11 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
 void Button::update() {
     m_background.setPosition(m_position);
-    m_background.setFillColor(m_state_styles[(int) m_current_state].fill_color);
+    if (!m_texture) {
+        m_background.setFillColor(m_state_styles[(int) m_current_state].fill_color);
+    } else {
+        m_background.setTexture(m_texture);
+    }
     m_background.setOutlineColor(m_state_styles[(int) m_current_state].outline_color);
     m_background.setOutlineThickness(m_state_styles[(int) m_current_state].outline_thickness);
 
@@ -124,4 +135,18 @@ sf::Vector2f Button::getLabelPosition() {
     };
 
     return m_background.getPosition() + offset;
+}
+
+void Button::setTexture(const sf::Texture *texture) {
+    m_texture = texture;
+    update();
+}
+
+void Button::setVisible(bool is_visible) {
+    m_is_visible = is_visible;
+    update();
+}
+
+void Button::setEnabled(bool is_enabled) {
+    m_is_enabled = is_enabled;
 }

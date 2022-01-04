@@ -4,11 +4,11 @@
 #include "SharedContext.h"
 #include "Window.h"
 #include "RoundedRectangle.h"
+#include "ResourceHolder.h"
 
 #include <string>
 #include <array>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 struct ButtonStyle {
     unsigned int font_size;
@@ -29,20 +29,29 @@ public:
     };
 
     Button(
-            SharedContext *sharedContext, const sf::Vector2f &size,
-            const sf::Vector2f &position, std::wstring string,
-            StateType stateType
+            SharedContext *sharedContext, StateType stateType,
+            const sf::Vector2f &size, const sf::Vector2f &position = {0, 0},
+            std::wstring string = L""
     );
 
     void setString(const std::wstring &string);
 
-    void setSize(const sf::Vector2f &size);
+    void setTexture(const sf::Texture *texture);
+
+//    void setSize(const sf::Vector2f &size);
 
     void setFontSize(float font_size);
 
     void setPosition(const sf::Vector2f &position);
 
-    void onClick();
+    void setVisible(bool is_visible);
+
+    void setEnabled(bool is_enabled);
+
+    template<class T>
+    void setOnClickCallback(void(T::*callback)(), T *object) {
+        m_on_click_callback = std::bind(callback, object);
+    };
 
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
@@ -59,6 +68,8 @@ private:
 
     SharedContext *m_shared_context;
 
+    const sf::Texture *m_texture{nullptr};
+
     std::wstring m_string;
     sf::Vector2f m_position;
     sf::Vector2f m_size;
@@ -69,6 +80,11 @@ private:
 
     RoundedRectangle m_background;
     sf::Text m_label;
+
+    bool m_is_visible{true};
+    bool m_is_enabled{true};
+
+    std::function<void()> m_on_click_callback;
 };
 
 

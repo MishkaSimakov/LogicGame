@@ -2,6 +2,8 @@
 
 Window::Window(const std::string &title, const sf::Vector2u &size) {
     setup(title, size);
+
+    m_views[ViewType::DEFAULT] = m_window.getDefaultView();
 }
 
 Window::~Window() {
@@ -15,7 +17,7 @@ void Window::setup(const std::string &title, const sf::Vector2u &size) {
     m_is_done = false;
     create();
 
-    m_event_manager.addEventCallback(StateType(0), sf::Event::Closed, &Window::close, this);
+    m_event_manager.addEventCallback(StateType(0), sf::Event::Closed, &Window::handleCloseEvent, this);
     m_event_manager.addKeyPressedCallback(StateType(0), sf::Keyboard::F5, &Window::toggleFullscreen, this);
 
     m_window.setFramerateLimit(60);
@@ -76,4 +78,26 @@ EventManager *Window::getEventManager() { return &m_event_manager; }
 
 sf::RenderWindow *Window::getRenderWindow() { return &m_window; }
 
-void Window::close(const sf::Event &event) { m_is_done = true; }
+void Window::close() { m_is_done = true; }
+
+sf::Vector2f Window::getMousePosition(const sf::View &view) {
+    return m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window), view);
+}
+
+sf::Vector2f Window::getMousePosition(Window::ViewType viewType) {
+    return getMousePosition(m_views[viewType]);
+}
+
+void Window::setWindowView(ViewType viewType) {
+    m_window.setView(m_views[viewType]);
+}
+
+void Window::setView(Window::ViewType viewType, sf::View view) {
+    m_views[viewType] = view;
+}
+
+sf::View &Window::getView(Window::ViewType viewType) {
+    return m_views[viewType];
+}
+
+void Window::handleCloseEvent(const sf::Event &event) { close(); }
