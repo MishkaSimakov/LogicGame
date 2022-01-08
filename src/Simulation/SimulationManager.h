@@ -6,6 +6,7 @@
 #include "BaseLogicalComponent.h"
 #include "ActingLogicalComponent.h"
 #include "WireShape.h"
+#include "SimulationConnectorsManager.h"
 
 #include <vector>
 #include <memory>
@@ -27,13 +28,7 @@ public:
 
     void addLogicalComponent(const sf::Vector2f &drag_origin, const BaseLogicalComponent *logical_component_data);
 
-    void startSimulation();
-
-    void stopSimulation() { m_simulation_running = false; };
-
-    bool runSimulationTest(bool *test);
-
-    [[nodiscard]] bool isSimulationRunning() const { return m_simulation_running; };
+    bool runSimulationTest(const std::vector<bool> &test_inputs, const std::vector<bool> &test_outputs);
 
 protected:
     sf::Vector2f getMousePosition();
@@ -72,11 +67,7 @@ protected:
     std::vector<std::unique_ptr<Connector>> m_connectors;
     std::vector<std::unique_ptr<WireShape>> m_wires;
 
-    int m_inputs_count;
-    std::vector<Connector *> m_simulation_inputs;
-
-    int m_outputs_count;
-    std::vector<Connector *> m_simulation_outputs;
+    SimulationConnectorsManager m_simulation_connectors_manager;
 
     bool m_simulation_running{false};
 

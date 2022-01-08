@@ -10,7 +10,9 @@ DocumentationBlock::DocumentationBlock(
                 RoundedRectangle::BOTTOM_RIGHT | RoundedRectangle::TOP_RIGHT
         ),
         m_title(m_offset, size.x - m_offset.x * 2, title, 40, "arial", sf::Text::Bold),
-        m_description({m_offset.x, 75}, size.x - m_offset.x * 2, description, 30),
+        m_description({m_offset.x, m_offset.y * 2 + m_title.getGlobalBounds().height}, size.x - m_offset.x * 2,
+                      description, 30),
+        m_description_scroll_box(sharedContext, StateType::Level, &m_description),
         m_shared_context(sharedContext),
         m_hide_btn(sharedContext, StateType::Level, {40, 40}),
         m_show_btn(sharedContext, StateType::Level, {40, 40}),
@@ -27,6 +29,10 @@ DocumentationBlock::DocumentationBlock(
     m_hide_btn.setOnClickCallback(&DocumentationBlock::hide, this);
     m_hide_btn.setTexture(&ResourceHolder::get().textures.get("cross"));
 
+    m_description_scroll_box.setMaxHeight(
+            (float) m_shared_context->m_wind->getWindowSize().y - m_offset.y * 2 - m_title.getGlobalBounds().height
+    );
+
     updatePositions();
 }
 
@@ -34,7 +40,7 @@ void DocumentationBlock::draw() {
     if (m_position > 0) {
         m_shared_context->m_wind->draw(m_background);
         m_shared_context->m_wind->draw(m_title);
-        m_shared_context->m_wind->draw(m_description);
+        m_shared_context->m_wind->draw(m_description_scroll_box);
 
         m_shared_context->m_wind->draw(m_hide_btn);
     }
@@ -89,4 +95,6 @@ void DocumentationBlock::updatePositions() {
     m_background.setPosition(m_position - m_opened_position, 0);
     m_title.setPosition({m_offset.x + m_position - m_opened_position, m_offset.y});
     m_description.setPosition({m_offset.x + m_position - m_opened_position, 75});
+
+    m_description_scroll_box.setInnerContent(&m_description);
 }

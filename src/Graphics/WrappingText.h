@@ -15,10 +15,11 @@ public:
 
     void setPosition(const sf::Vector2f &position);
 
+    sf::FloatRect getGlobalBounds() const;
+
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-protected:
     void parseContent();
 
     sf::Vector2f m_position;

@@ -9,6 +9,8 @@
 namespace Resources {
     class LevelResource {
     public:
+        using test_T = std::pair<std::vector<bool>, std::vector<bool>>;
+
         LevelResource() = default;
 
         // TODO: add memory cleaning after end
@@ -46,7 +48,7 @@ namespace Resources {
             return m_outputs_count;
         }
 
-        [[nodiscard]] const std::vector<bool *> &getTests() const {
+        [[nodiscard]] const std::vector<test_T> &getTests() const {
             return m_tests;
         }
 
@@ -85,17 +87,21 @@ namespace Resources {
             while (file.peek() != EOF) {
                 std::getline(file, temp);
 
-                bool *ptr = new bool[m_inputs_count + m_outputs_count];
+                test_T test;
 
                 int i = 0;
                 for (wchar_t c: temp) {
                     if (c != L' ') {
-                        ptr[i] = c == L'1';
+                        if (i < m_inputs_count)
+                            test.first.push_back(c == L'1');
+                        else
+                            test.second.push_back(c == L'1');
+
                         ++i;
                     }
                 }
 
-                m_tests.push_back(ptr);
+                m_tests.push_back(std::move(test));
             }
         }
 
@@ -106,7 +112,7 @@ namespace Resources {
         int m_inputs_count{0};
         int m_outputs_count{0};
 
-        std::vector<bool *> m_tests;
+        std::vector<test_T> m_tests;
     };
 }
 

@@ -2,7 +2,7 @@
 #define LOGICGAMEENGINE_MAINMENUSTATE_H
 
 #include "BaseState.h"
-#include "Button.h"
+#include "Graphics/GUI/Button.h"
 #include <SFML/Graphics.hpp>
 
 class MainMenuState : public BaseState {

@@ -7,7 +7,7 @@
 
 class RoundedRectangle : public sf::Shape {
 public:
-    enum corners {
+    enum Corners {
         TOP_LEFT = 1 << 0,
         TOP_RIGHT = 1 << 1,
         BOTTOM_RIGHT = 1 << 2,
@@ -16,11 +16,13 @@ public:
     };
 
     explicit RoundedRectangle(
-            const sf::Vector2f &size,
+            const sf::Vector2f &size = {0, 0},
             float radius = 10.f,
-            unsigned char corners_to_round = corners::ALL,
+            unsigned char corners_to_round = Corners::ALL,
             int points = 10
     );
+
+    void setSize(const sf::Vector2f& size);
 
     size_t getPointCount() const override {
         return m_vertices.size();
@@ -31,6 +33,14 @@ public:
     }
 
 protected:
+    void generatePoints();
+
+    sf::Vector2f m_size;
+    float m_radius;
+    unsigned char m_corners_to_round;
+    int m_points;
+
+
     std::vector<sf::Vector2f> m_vertices;
 };
 

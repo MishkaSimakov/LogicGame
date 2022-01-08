@@ -1,5 +1,6 @@
 #include "ConnectorShape.h"
 #include "WireShape.h"
+#include "ResourceHolder.h"
 
 void ConnectorShape::update() {
     if (m_is_simulation_connector) {
@@ -16,10 +17,31 @@ void ConnectorShape::update() {
     for (auto wire: m_connected_wires) {
         wire->update();
     }
+
+    m_label_shape.setFillColor(sf::Color::Black);
+    m_label_shape.setString(m_label);
+    m_label_shape.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_label_shape.setCharacterSize(20);
+    m_label_shape.setStyle(sf::Text::Bold);
+
+    m_label_shape.setPosition(
+            m_position.x - m_label_shape.getGlobalBounds().width / 2.f,
+            m_position.y + m_radius + 5
+    );
+
+    sf::Vector2f offset {5., 0.f};
+    m_label_background_shape.setFillColor(sf::Color::White);
+    m_label_background_shape.setPosition(m_label_shape.getPosition() - offset);
+    m_label_background_shape.setSize({m_label_shape.getGlobalBounds().width + offset.x * 2, m_label_shape.getGlobalBounds().height + offset.y * 2});
 }
 
 void ConnectorShape::draw(Window *window) {
     window->draw(m_shape);
+
+    if (!m_label.empty()) {
+        window->draw(m_label_background_shape);
+        window->draw(m_label_shape);
+    }
 }
 
 bool ConnectorShape::checkClick(const sf::Vector2f &position) {

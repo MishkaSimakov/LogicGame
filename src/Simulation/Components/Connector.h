@@ -1,9 +1,12 @@
 #ifndef LOGICGAMEENGINE_CONNECTOR_H
 #define LOGICGAMEENGINE_CONNECTOR_H
 
-#include <SFML/Graphics.hpp>
-#include <cmath>
 #include "ConnectorShape.h"
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 class ActingLogicalComponent;
 

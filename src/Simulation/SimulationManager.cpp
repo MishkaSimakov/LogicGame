@@ -2,26 +2,7 @@
 
 SimulationManager::SimulationManager(SharedContext *sharedContext, int inputs_count, int outputs_count) :
         m_shared_context(sharedContext),
-        m_inputs_count(inputs_count),
-        m_outputs_count(outputs_count) {
-    m_connectors.reserve(inputs_count + outputs_count);
-
-    m_simulation_inputs.reserve(inputs_count);
-    for (int i = 0; i < inputs_count; ++i) {
-        auto &connector = m_connectors.emplace_back(std::make_unique<Connector>(Connector::Type::INPUT, true));
-        m_simulation_inputs.push_back(connector.get());
-
-        connector->getShape()->setPosition({900.f + (float) i * 100.f, 100.f});
-    }
-
-    m_simulation_outputs.reserve(outputs_count);
-    for (int i = 0; i < outputs_count; ++i) {
-        auto &connector = m_connectors.emplace_back(std::make_unique<Connector>(Connector::Type::OUTPUT, true));
-        m_simulation_outputs.push_back(connector.get());
-
-        connector->getShape()->setPosition({900.f + (float) i * 100.f, 700.f});
-    }
-
+        m_simulation_connectors_manager(inputs_count, outputs_count, &m_connectors) {
     sf::View simulation_view;
     simulation_view.setSize((sf::Vector2f) m_shared_context->m_wind->getWindowSize());
     simulation_view.setCenter((sf::Vector2f) m_shared_context->m_wind->getWindowSize() / 2.f);
@@ -81,7 +62,7 @@ void SimulationManager::doSimulationStep() {
     }
 
     if (temp.empty()) {
-        stopSimulation();
+        m_simulation_running = false;
         return;
     }
 
@@ -248,26 +229,14 @@ sf::Vector2f SimulationManager::getMousePosition() {
     return m_shared_context->m_wind->getMousePosition(Window::ViewType::SIMULATION);
 }
 
-void SimulationManager::startSimulation() {
+bool SimulationManager::runSimulationTest(const std::vector<bool> &test_inputs, const std::vector<bool> &test_outputs) {
+    m_simulation_connectors_manager.setValues(test_inputs);
+
+    m_current_connectors = m_simulation_connectors_manager.getOutputs();
     m_simulation_running = true;
-
-    m_current_connectors = m_simulation_outputs;
-}
-
-bool SimulationManager::runSimulationTest(bool *test) {
-    for (int i = 0; i < m_outputs_count; ++i) {
-        m_simulation_outputs[i]->setValue(test[i]);
-    }
-
-    startSimulation();
 
     while (m_simulation_running)
         doSimulationStep();
-
-    for (int i = 0; i < m_inputs_count; ++i) {
-        if (m_simulation_inputs[i]->getValue() != test[m_outputs_count + i])
-            return false;
-    }
-
-    return true;
+    
+    return m_simulation_connectors_manager.checkTest(test_outputs);
 }

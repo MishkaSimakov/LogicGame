@@ -8,6 +8,7 @@
 #include "SharedContext.h"
 #include "Window.h"
 #include "Button.h"
+#include "ScrollBox.h"
 
 #include <string>
 #include <TGUI/TGUI.hpp>
@@ -42,6 +43,7 @@ private:
     RoundedRectangle m_background;
     WrappingText m_title;
     WrappingText m_description;
+    ScrollBox m_description_scroll_box;
 
     SharedContext *m_shared_context;
 

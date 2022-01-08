@@ -4,7 +4,7 @@
 #include "BaseState.h"
 #include "SharedContext.h"
 #include "RoundedRectangle.h"
-#include "Button.h"
+#include "Graphics/GUI/Button.h"
 #include "StateManager.h"
 #include "Window.h"
 

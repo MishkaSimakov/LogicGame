@@ -88,11 +88,13 @@ void LevelState::handleMousePressed(const sf::Event &event) {
 void LevelState::startSimulation(const sf::Event &event) {
     int wrong_count = 0;
 
-    for (bool *test: ResourceHolder::get().levels.get("1").getTests()) {
-        if (!m_simulation_manager.runSimulationTest(test)) {
+    for (auto &[test_inputs, test_outputs]: ResourceHolder::get().levels.get("1").getTests()) {
+        if (!m_simulation_manager.runSimulationTest(test_inputs, test_outputs)) {
             ++wrong_count;
         }
     }
+
+    std::cout << wrong_count << std::endl;
 
     m_stateManager->switchTo(StateType::LevelResult);
 }

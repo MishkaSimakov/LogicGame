@@ -59,3 +59,11 @@ void WrappingText::setPosition(const sf::Vector2f &position) {
 
     m_text.setPosition(position);
 }
+
+sf::FloatRect WrappingText::getGlobalBounds() const {
+    auto bounds = m_text.getGlobalBounds();
+
+    bounds.width = m_max_width;
+
+    return bounds;
+}

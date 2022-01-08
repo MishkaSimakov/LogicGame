@@ -33,6 +33,10 @@ public:
         update();
     }
 
+    void setLabel(const std::wstring &label) {
+        m_label = label;
+    };
+
     Connector *getConnector() const {
         return m_connector;
     }
@@ -43,6 +47,10 @@ protected:
     float m_radius{10.f};
     sf::Vector2f m_position;
     sf::CircleShape m_shape;
+    sf::Text m_label_shape;
+    sf::RectangleShape m_label_background_shape;
+
+    std::wstring m_label;
 
     std::vector<WireShape *> m_connected_wires;
 

@@ -41,6 +41,8 @@ public:
 
     void setWindowView(ViewType viewType);
 
+    void setWindowView(const sf::View &view);
+
     void setView(ViewType viewType, sf::View view);
 
     sf::View &getView(ViewType viewType);

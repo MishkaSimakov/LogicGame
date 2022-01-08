@@ -89,7 +89,7 @@ sf::Vector2f Window::getMousePosition(Window::ViewType viewType) {
 }
 
 void Window::setWindowView(ViewType viewType) {
-    m_window.setView(m_views[viewType]);
+    setWindowView(m_views[viewType]);
 }
 
 void Window::setView(Window::ViewType viewType, sf::View view) {
@@ -101,3 +101,7 @@ sf::View &Window::getView(Window::ViewType viewType) {
 }
 
 void Window::handleCloseEvent(const sf::Event &event) { close(); }
+
+void Window::setWindowView(const sf::View &view) {
+    m_window.setView(view);
+}
