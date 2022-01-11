@@ -7,6 +7,7 @@
 #include "And.h"
 #include "Or.h"
 #include "DocumentationBlock.h"
+#include "LevelControls.h"
 
 class LevelState : public BaseState {
 public:
@@ -27,13 +28,14 @@ public:
 protected:
     void handleMousePressed(const sf::Event &event);
 
-    void startSimulation(const sf::Event &event);
+    void runTests();
 
     const float m_documentation_block_width{800.f};
 
     SimulationManager m_simulation_manager;
     StaticComponentsBlock m_components_block;
     DocumentationBlock m_documentation_block;
+    LevelControls m_level_controls;
 
     And m_and_data;
     Or m_or_data;

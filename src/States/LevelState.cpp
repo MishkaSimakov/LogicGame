@@ -22,6 +22,11 @@ LevelState::LevelState(StateManager *stateManager) :
                 {m_documentation_block_width,
                  (float) stateManager->getContext()->m_wind->getRenderWindow()->getSize().y},
                 stateManager->getContext()
+        ),
+        m_level_controls(
+                stateManager->getContext(),
+                &LevelState::runTests,
+                this
         ) {
     stateManager->getContext()->m_eventManager->addMouseReleasedCallback(
             StateType::Level, sf::Mouse::Left,
@@ -37,10 +42,10 @@ LevelState::LevelState(StateManager *stateManager) :
             &LevelState::handleMousePressed, this
     );
 
-    stateManager->getContext()->m_eventManager->addKeyReleasedCallback(
-            StateType::Level, sf::Keyboard::Space,
-            &LevelState::startSimulation, this
-    );
+//    stateManager->getContext()->m_eventManager->addKeyReleasedCallback(
+//            StateType::Level, sf::Keyboard::Space,
+//            &LevelState::startSimulation, this
+//    );
 
     m_components_block.addStaticComponent(&m_and_data);
     m_components_block.addStaticComponent(&m_or_data);
@@ -69,6 +74,7 @@ void LevelState::draw() {
     m_simulation_manager.draw();
     m_components_block.draw();
     m_documentation_block.draw();
+    m_level_controls.draw();
 }
 
 void LevelState::handleMousePressed(const sf::Event &event) {
@@ -85,7 +91,7 @@ void LevelState::handleMousePressed(const sf::Event &event) {
     m_simulation_manager.handleMousePressed(event);
 }
 
-void LevelState::startSimulation(const sf::Event &event) {
+void LevelState::runTests() {
     int wrong_count = 0;
 
     for (auto &[test_inputs, test_outputs]: ResourceHolder::get().levels.get("1").getTests()) {
