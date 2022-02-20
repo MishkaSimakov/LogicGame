@@ -1,0 +1,5 @@
+/cmake-build-debug
+/cmake-build-release
+.idea
+/resources/textures/icons
+.DS_Store
