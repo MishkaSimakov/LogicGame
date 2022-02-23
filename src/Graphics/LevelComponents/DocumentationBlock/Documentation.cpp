@@ -25,3 +25,21 @@ void Documentation::setLevel(const Level &level) {
     m_description.setString(level.getDescription());
     m_truth_table.setLevel(level);
 }
+
+sf::FloatRect Documentation::getGlobalBounds() const {
+    sf::FloatRect bounds;
+
+    bounds.width = m_max_width;
+    bounds.height = m_truth_table.getGlobalBounds().top + m_truth_table.getGlobalBounds().height
+                    - m_description.getGlobalBounds().top;
+    bounds.left = m_position.x;
+    bounds.top = m_position.y;
+
+    return bounds;
+}
+
+void Documentation::setPosition(const sf::Vector2f &position) {
+    m_position = position;
+
+    update();
+}

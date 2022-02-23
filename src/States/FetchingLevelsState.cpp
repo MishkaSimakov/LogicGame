@@ -10,35 +10,41 @@ FetchingLevelsState::FetchingLevelsState(StateManager *stateManager) :
 void FetchingLevelsState::onCreate() {
     fetchLevelsFromServer();
 
+    auto level_manager = m_stateManager->getContext()->m_level_manager;
+
     if (!m_remote_content.empty()) {
-        const std::string remote_content_as_string = std::string(m_remote_content.begin(), m_remote_content.end());
+        m_remote_levels_file.Parse(&(m_remote_content[0]));
 
-        auto levels_filename = m_stateManager->getContext()->m_level_manager->getLevelsFilename();
+        auto levels_filename = level_manager->getLevelsFilename();
 
-        m_local_levels_file.LoadFile(levels_filename);
+        if (level_manager->checkLevels()) {
+            m_local_levels_file.LoadFile(levels_filename);
 
-        auto level_node = m_local_levels_file.FirstChildElement("levels")->FirstChildElement("level");
-        std::map<int, bool> levels_progress;
+            auto level_node = m_local_levels_file.FirstChildElement("levels")->FirstChildElement("level");
+            std::map<int, bool> levels_progress;
 
-        for (; level_node != nullptr; level_node = level_node->NextSiblingElement("level")) {
-            levels_progress[level_node->IntAttribute("id")] = level_node->BoolAttribute("passed");
-        }
+            for (; level_node != nullptr; level_node = level_node->NextSiblingElement("level")) {
+                levels_progress[level_node->IntAttribute("id")] = level_node->BoolAttribute("passed");
+            }
 
-        m_remote_levels_file.Parse(&(remote_content_as_string[0]));
+            level_node = m_remote_levels_file.FirstChildElement("levels")->FirstChildElement("level");
+            for (; level_node != nullptr; level_node = level_node->NextSiblingElement("level")) {
+                int level_id = level_node->IntAttribute("id");
 
-        level_node = m_remote_levels_file.FirstChildElement("levels")->FirstChildElement("level");
-        for (; level_node != nullptr; level_node = level_node->NextSiblingElement("level")) {
-            int level_id = level_node->IntAttribute("id");
-
-            if (levels_progress.contains(level_id)) {
-                level_node->SetAttribute("passed", levels_progress[level_id]);
+                if (levels_progress.contains(level_id)) {
+                    level_node->SetAttribute("passed", levels_progress[level_id]);
+                }
             }
         }
 
         m_remote_levels_file.SaveFile(levels_filename);
     }
 
-    m_stateManager->getContext()->m_level_manager->loadLevels();
+    if (!level_manager->checkLevels()) {
+        throw std::runtime_error("levels file corrupted");
+    }
+
+    level_manager->loadLevels();
 
     m_stateManager->remove(StateType::FetchingLevels);
     m_stateManager->switchTo(StateType::MainMenu);

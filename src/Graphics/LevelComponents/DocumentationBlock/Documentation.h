@@ -1,12 +1,12 @@
 #ifndef LOGICGAMEENGINE_DOCUMENTATION_H
 #define LOGICGAMEENGINE_DOCUMENTATION_H
 
-
-#include <SFML/Graphics/Drawable.hpp>
 #include "Level.h"
 #include "WrappingText.h"
 #include "TruthTable.h"
 #include "LevelLayout.h"
+
+#include <SFML/Graphics/Drawable.hpp>
 #include <string>
 
 
@@ -18,23 +18,9 @@ public:
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-    sf::FloatRect getGlobalBounds() const {
-        sf::FloatRect bounds;
+    sf::FloatRect getGlobalBounds() const;
 
-        bounds.width = m_max_width;
-        bounds.height = m_truth_table.getGlobalBounds().top + m_truth_table.getGlobalBounds().height
-                        - m_description.getGlobalBounds().top;
-        bounds.left = m_position.x;
-        bounds.top = m_position.y;
-
-        return bounds;
-    }
-
-    void setPosition(const sf::Vector2f &position) {
-        m_position = position;
-
-        update();
-    }
+    void setPosition(const sf::Vector2f &position);
 
 protected:
     void update();

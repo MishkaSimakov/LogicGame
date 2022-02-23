@@ -101,3 +101,39 @@ bool WireShape::isPointInTriangle(
 
     return !(has_neg && has_pos);
 }
+
+size_t WireShape::getSegmentIdByPosition(const sf::Vector2f &position) {
+    return 0;
+}
+
+size_t WireShape::addWaypoint(const sf::Vector2f &position, size_t segment_id) {
+    return 0;
+}
+
+void WireShape::dragWaypoint(size_t waypoint_id, const sf::Vector2f &position) {
+
+}
+
+bool WireShape::needToRemoveWaypoint(size_t waypoint_id) {
+    sf::Vector2f prev_waypoint_pos;
+    sf::Vector2f next_waypoint_pos;
+    sf::Vector2f waypoint_pos = m_waypoints[waypoint_id];
+
+    if (waypoint_id == 0)
+        prev_waypoint_pos = m_start_connector->getPosition();
+    else
+        prev_waypoint_pos = m_waypoints[waypoint_id - 1];
+
+    if (waypoint_id == m_waypoints.size() - 1)
+        next_waypoint_pos = m_end_connector->getPosition();
+    else
+        next_waypoint_pos = m_waypoints[waypoint_id + 1];
+
+    if (abs((waypoint_pos.x - prev_waypoint_pos.x) / (waypoint_pos.y - prev_waypoint_pos.y) - (next_waypoint_pos.x - waypoint_pos.x) / (next_waypoint_pos.y - waypoint_pos.x))) {
+
+    }
+}
+
+void WireShape::removeWaypoint(size_t waypoint_id) {
+    m_waypoints.erase(m_waypoints.begin() + (long) waypoint_id);
+}

@@ -15,6 +15,8 @@ public:
 
     const std::vector<Level> &getLevels();
 
+    bool checkLevels();
+
     void loadLevels();
 
     int getLevelsCount();

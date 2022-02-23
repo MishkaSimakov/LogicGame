@@ -6,9 +6,11 @@
 #include "And.h"
 #include "Or.h"
 #include "Not.h"
+#include "Xor.h"
 
 #include <map>
 #include <string>
+#include <iostream>
 
 class ComponentsDataFactory {
 public:

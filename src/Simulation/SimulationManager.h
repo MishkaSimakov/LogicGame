@@ -77,9 +77,10 @@ protected:
 
     SharedContext *m_shared_context;
 
-    // data for dragging
     ActingLogicalComponent *m_dragged_component{nullptr};
     WireShape *m_dragged_wire{nullptr};
+    long m_dragged_wire_point_id{-1};
+    long m_dragged_wire_drag_origin_segment_id{-1};
     bool m_is_dragging_plot{false};
 
     sf::Vector2f m_drag_origin;
@@ -95,6 +96,8 @@ protected:
     SimulationConnectorsManager m_simulation_connectors_manager;
 
     bool m_simulation_running{false};
+
+    int m_simulation_steps_limit{1000};
 };
 
 

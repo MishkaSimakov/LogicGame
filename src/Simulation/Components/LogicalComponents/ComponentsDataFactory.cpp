@@ -13,9 +13,10 @@ const BaseLogicalComponent *ComponentsDataFactory::getComponentData(const std::s
 void ComponentsDataFactory::createComponentsData() {
     if (!m_components.empty()) return;
 
-    createComponentData<And>("And");
-    createComponentData<Or>("Or");
-    createComponentData<Not>("Not");
+    createComponentData<And>("and");
+    createComponentData<Or>("or");
+    createComponentData<Not>("not");
+    createComponentData<Xor>("xor");
 }
 
 ComponentsDataFactory::~ComponentsDataFactory() {

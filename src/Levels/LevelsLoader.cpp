@@ -108,3 +108,9 @@ void LevelsLoader::loadAllowedComponents(tinyxml2::XMLElement *levelElement, Lev
         levelData->appendAllowedComponent(component->GetText());
     }
 }
+
+bool LevelsLoader::checkLevels() {
+    m_levels_file.LoadFile(m_levels_filename);
+
+    return m_levels_file.FirstChildElement("levels") != nullptr;
+}

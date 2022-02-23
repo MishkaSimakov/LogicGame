@@ -52,6 +52,20 @@ public:
         m_is_selected = false;
     }
 
+    [[nodiscard]] bool isUnconnected() const {
+        return !m_start_connector || !m_end_connector;
+    }
+
+    [[nodiscard]] size_t getSegmentIdByPosition(const sf::Vector2f &position);
+
+    [[nodiscard]] size_t addWaypoint(const sf::Vector2f &position, size_t segment_id);
+
+    void dragWaypoint(size_t waypoint_id, const sf::Vector2f &position);
+
+    bool needToRemoveWaypoint(size_t waypoint_id);
+
+    void removeWaypoint(size_t waypoint_id);
+
 protected:
     static void appendSegment(
             sf::Vector2f start, sf::Vector2f end, float width,

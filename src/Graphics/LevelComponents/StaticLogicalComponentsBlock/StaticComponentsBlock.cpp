@@ -83,6 +83,9 @@ void StaticComponentsBlock::setSize(const sf::Vector2f &size) {
 }
 
 void StaticComponentsBlock::update() {
+    m_background.setSize(m_size);
+    m_background.setPosition(m_position);
+
     for (int i = 0; i < m_components.size(); ++i) {
         m_components[i]->getShape()->setPosition(getComponentPosition(i));
     }

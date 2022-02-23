@@ -27,7 +27,7 @@ protected:
     void fetchLevelsFromServer();
 
     std::string m_remote_content;
-    std::string m_server_url {"http://logics.games.com/api/level"};
+    std::string m_server_url {"http://logics.games/api/level"};
 
     tinyxml2::XMLDocument m_local_levels_file;
     tinyxml2::XMLDocument m_remote_levels_file;

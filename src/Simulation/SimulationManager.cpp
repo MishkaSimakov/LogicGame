@@ -170,7 +170,27 @@ void SimulationManager::dragComponent() {
 }
 
 void SimulationManager::dragWire() {
-    m_dragged_wire->dragTo(getMousePosition());
+    if (m_dragged_wire->isUnconnected()) {
+        m_dragged_wire->dragTo(getMousePosition());
+
+        return;
+    }
+
+    if (m_dragged_wire_point_id != -1) {
+        m_dragged_wire->dragWaypoint(m_dragged_wire_point_id, getMousePosition());
+
+        if (m_dragged_wire->needToRemoveWaypoint(m_dragged_wire_point_id)) {
+            m_dragged_wire->removeWaypoint(m_dragged_wire_point_id);
+            m_dragged_wire_point_id = -1;
+        }
+
+        return;
+    }
+
+    int max_drag_without_waypoint_distance = 10;
+    if (sqrt(pow(m_drag_origin.x - getMousePosition().x, 2) + pow(m_drag_origin.y - getMousePosition().y, 2)) > max_drag_without_waypoint_distance) {
+        m_dragged_wire_point_id = (long) m_dragged_wire->addWaypoint(getMousePosition(), m_dragged_wire_drag_origin_segment_id);
+    }
 }
 
 void SimulationManager::releaseComponent() {
@@ -178,6 +198,9 @@ void SimulationManager::releaseComponent() {
 }
 
 void SimulationManager::releaseWire() {
+    m_dragged_wire_point_id = -1;
+    m_dragged_wire_drag_origin_segment_id = -1;
+
     if (!m_dragged_wire) return;
 
     // check whether wire under component
@@ -275,6 +298,11 @@ bool SimulationManager::runSimulationTest(const std::vector<bool> &test_inputs, 
 
 void SimulationManager::grabWire(WireShape *wire) {
     deselectShapes();
+
+    m_dragged_wire = wire;
+    m_drag_origin = getMousePosition();
+
+    m_dragged_wire_drag_origin_segment_id = (long) m_dragged_wire->getSegmentIdByPosition(getMousePosition());
 
     m_selected_shape = wire;
     wire->select();

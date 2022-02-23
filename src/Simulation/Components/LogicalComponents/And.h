@@ -5,7 +5,7 @@
 
 class And : public BaseLogicalComponent {
 public:
-    And() : BaseLogicalComponent(L"И", "LogicalComponents/and", 2, 1) {}
+    And() : BaseLogicalComponent(L"И", 2, 1) {}
 
     void processInput(const std::vector<bool> *input, std::vector<bool> *output) const override {
         assert(getInputsCount() == input->size());

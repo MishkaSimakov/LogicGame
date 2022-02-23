@@ -32,6 +32,8 @@ protected:
 
     sf::VertexArray m_borders;
     std::vector<sf::Text> m_cells;
+
+    bool m_is_visible{false};
 };
 
 

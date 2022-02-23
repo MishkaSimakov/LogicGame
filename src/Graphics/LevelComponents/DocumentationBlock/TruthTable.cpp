@@ -10,6 +10,8 @@ TruthTable::TruthTable(const sf::Vector2f &position, const Level &level) :
 }
 
 void TruthTable::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (!m_is_visible) return;
+
     target.draw(m_borders);
 
     target.draw(m_title);
@@ -36,6 +38,10 @@ void TruthTable::setPosition(const sf::Vector2f &position) {
 void TruthTable::setLevel(const Level &level) {
     m_borders.clear();
     m_cells.clear();
+
+    m_is_visible = level.getVisibleTestsCount() > 0;
+
+    if (!m_is_visible) return;
 
     sf::Vector2f current_position{
             m_position.x,

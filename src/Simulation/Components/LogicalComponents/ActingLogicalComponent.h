@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <iostream>
 
 class WireShape;
 

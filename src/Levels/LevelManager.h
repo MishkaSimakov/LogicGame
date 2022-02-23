@@ -72,6 +72,10 @@ public:
         m_levels_loader.getLevels(); // levels will be loaded when first getLevels called
     }
 
+    bool checkLevels() {
+        return m_levels_loader.checkLevels(); // check if levels file correct
+    }
+
     bool isLevelUnlocked(int level_id) {
         return level_id == 0 || m_levels_loader.getLevels()[level_id - 1].isPassed();
     }

@@ -5,7 +5,7 @@
 
 class Not : public BaseLogicalComponent {
 public:
-    Not() : BaseLogicalComponent(L"НЕ", "LogicalComponents/not", 1, 1) {}
+    Not() : BaseLogicalComponent(L"НЕ", 1, 1) {}
 
     void processInput(const std::vector<bool> *input, std::vector<bool> *output) const override {
         assert(getInputsCount() == input->size());
