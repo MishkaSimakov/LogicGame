@@ -2,7 +2,7 @@
 
 TruthTable::TruthTable(const sf::Vector2f &position, const Level &level) :
         m_position(position),
-        m_title(L"Таблица истинности:", ResourceHolder::get().fonts.get("arial"), 30),
+        m_title(L"Таблица истинности:", ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename), 30),
         m_borders(sf::Lines) {
     m_title.setPosition(m_position);
     m_title.setFillColor(sf::Color::Black);
@@ -63,7 +63,7 @@ void TruthTable::setLevel(const Level &level) {
                 col < level.getInputsCount()
                 ? level.getInputs()[col]
                 : level.getOutputs()[col - level.getInputsCount()],
-                ResourceHolder::get().fonts.get("arial"), 30
+                ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename), 30
         );
 
         label.setStyle(sf::Text::Bold);
@@ -90,7 +90,7 @@ void TruthTable::setLevel(const Level &level) {
                     (col < level.getInputsCount()
                      ? level.getTests()[row].first[col]
                      : level.getTests()[row].second[col - level.getInputsCount()]) ? L"1" : L"0",
-                    ResourceHolder::get().fonts.get("arial"), 30
+                    ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename), 30
             );
 
             label.setPosition(current_position);

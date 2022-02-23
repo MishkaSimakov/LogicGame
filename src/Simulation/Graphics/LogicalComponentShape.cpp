@@ -1,5 +1,4 @@
 #include "LogicalComponentShape.h"
-#include "ResourceHolder.h"
 
 LogicalComponentShape::LogicalComponentShape(
         const sf::Vector2f &size, const sf::Vector2f &position,
@@ -10,7 +9,7 @@ LogicalComponentShape::LogicalComponentShape(
 //    m_shape.setTexture(m_texture);
     m_shape.setFillColor(sf::Color(19, 60, 85));
 
-    m_text.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_text.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_text.setString(name);
     m_text.setFillColor(sf::Color::White);
     m_text.setCharacterSize(40);

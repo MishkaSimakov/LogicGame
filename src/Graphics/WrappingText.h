@@ -2,14 +2,17 @@
 #define LOGICGAMEENGINE_WRAPPINGTEXT_H
 
 #include "ResourceHolder.h"
+#include "Constants/Paths.h"
+
 #include <string>
+#include <utility>
 #include <SFML/Graphics.hpp>
 
 class WrappingText : public sf::Drawable {
 public:
     WrappingText(
             sf::Vector2f position, float max_width, std::wstring content,
-            int font_size = 20, const std::string &font_name = "arial", sf::Uint32 style = sf::Text::Regular
+            int font_size = 20, const std::string &font_name = Constants::Paths::main_font_filename, sf::Uint32 style = sf::Text::Regular
     );
 
     void setPosition(const sf::Vector2f &position);

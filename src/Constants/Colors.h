@@ -1,0 +1,10 @@
+#ifndef LOGICGAMEENGINE_COLORS_H
+#define LOGICGAMEENGINE_COLORS_H
+
+
+class Colors {
+
+};
+
+
+#endif //LOGICGAMEENGINE_COLORS_H

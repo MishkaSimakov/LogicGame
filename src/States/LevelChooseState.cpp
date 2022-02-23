@@ -11,7 +11,7 @@ LevelChooseState::LevelChooseState(StateManager *stateManager) :
         ) {
     m_level_count = (int) m_stateManager->getContext()->m_level_manager->getLevels().size();
 
-    m_quit_level_choose_btn.setTexture(&ResourceHolder::get().textures.get("arrow_left"));
+    m_quit_level_choose_btn.setTexture(&ResourceHolder::get().textures.get(Constants::Paths::home_icon_filename));
     m_quit_level_choose_btn.setOnClickCallback(&LevelChooseState::quitLevelChoose, this);
 
     int row = -1;
@@ -41,7 +41,8 @@ LevelChooseState::LevelChooseState(StateManager *stateManager) :
             m_level_btns.back()->setString(std::to_wstring(i + 1));
         } else {
             m_level_btns.back()->setEnabled(false);
-            m_level_btns.back()->setTexture(&ResourceHolder::get().textures.get("icons/lock_2"));
+            m_level_btns.back()->setTexture(&ResourceHolder::get().textures.get(Constants::Paths::locked_icon_filename));
+            m_level_btns.back()->setTextureOffset(15);
         }
 
         m_level_btns.back()->setPosition(

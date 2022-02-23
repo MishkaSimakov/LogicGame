@@ -3,6 +3,7 @@
 
 #include "BaseState.h"
 #include "Button.h"
+#include "Constants/Paths.h"
 
 #include <cmath>
 #include <string>

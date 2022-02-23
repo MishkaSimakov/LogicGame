@@ -18,10 +18,10 @@ LevelControls::LevelControls(
         m_quit_level_btn(
                 sharedContext, StateType::Level, m_quit_level_btn_size, {25.f, 25.f}
         ) {
-    m_quit_level_btn.setTexture(&ResourceHolder::get().textures.get("icons/home_2_1"));
+    m_quit_level_btn.setTexture(&ResourceHolder::get().textures.get(Constants::Paths::home_icon_filename));
     m_quit_level_btn.setOnClickCallback(quit_level_cb, object);
 
-    m_run_tests_btn.setTexture(&ResourceHolder::get().textures.get("icons/play_cr"));
+    m_run_tests_btn.setTexture(&ResourceHolder::get().textures.get(Constants::Paths::test_icon_filename));
     m_run_tests_btn.setOnClickCallback(run_tests_cb, object);
 }
 

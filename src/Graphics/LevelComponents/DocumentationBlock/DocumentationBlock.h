@@ -11,6 +11,7 @@
 #include "ScrollBox.h"
 #include "LevelLayout.h"
 #include "Documentation.h"
+#include "Constants/Paths.h"
 
 #include <string>
 

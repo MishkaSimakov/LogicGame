@@ -50,6 +50,8 @@ public:
     }
 
     LevelResult getResult() {
+        if (getCurrentLevel()->getTests().empty()) return LevelResult::SUCCESS;
+
         float percentage = (float) m_passed_tests_count / (float) getCurrentLevel()->getTests().size();
 
         for (auto[level_result, result_threshold]: m_result_percentages) {

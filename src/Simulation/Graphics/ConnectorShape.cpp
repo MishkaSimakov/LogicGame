@@ -3,16 +3,10 @@
 #include "ResourceHolder.h"
 
 void ConnectorShape::update() {
-//    bool is_simulation_connector = m_type == ConnectorType::SIMULATION_INPUT
-//                                   || m_type == ConnectorType::SIMULATION_OUTPUT;
-
     float radius = m_radius[m_type];
     m_shape.setOrigin(radius, radius);
 
     m_shape.setRadius(radius);
-
-//    m_shape.setOutlineThickness(5);
-//    m_shape.setOutlineColor(sf::Color::Black);
 
     if (*m_value_link) {
         m_shape.setFillColor(sf::Color(182, 37, 25));
@@ -28,7 +22,7 @@ void ConnectorShape::update() {
 
     m_label_shape.setFillColor(Colors::TEXT_FILL_COLOR);
     m_label_shape.setString(m_label);
-    m_label_shape.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_label_shape.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_label_shape.setCharacterSize(20);
     m_label_shape.setStyle(sf::Text::Bold);
 

@@ -8,6 +8,7 @@
 #include "StateManager.h"
 #include "Window.h"
 #include "LevelManager.h"
+#include "Constants/Paths.h"
 
 #include <string>
 #include <unordered_map>

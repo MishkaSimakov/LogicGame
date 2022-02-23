@@ -2,6 +2,8 @@
 #define LOGICGAMEENGINE_FETCHINGLEVELSSTATE_H
 
 #include "BaseState.h"
+#include "Constants/Paths.h"
+
 #include <curl/curl.h>
 #include <tinyxml2.h>
 #include <map>
@@ -27,7 +29,7 @@ protected:
     void fetchLevelsFromServer();
 
     std::string m_remote_content;
-    std::string m_server_url {"http://logics.games/api/level"};
+    std::string m_server_url {Constants::Paths::levels_hostname};
 
     tinyxml2::XMLDocument m_local_levels_file;
     tinyxml2::XMLDocument m_remote_levels_file;

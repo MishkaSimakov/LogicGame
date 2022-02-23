@@ -1,7 +1,5 @@
 #include "WrappingText.h"
 
-#include <utility>
-
 WrappingText::WrappingText(
         sf::Vector2f position, float max_width, std::wstring content,
         int font_size, const std::string &font_name, sf::Uint32 style

@@ -7,7 +7,7 @@ BaseState(stateManager), m_confetti(sf::Quads) {
     m_message.setString(L"Поздравляем! Вы прошли игру.");
     m_message.setFillColor(sf::Color::Black);
     m_message.setCharacterSize(50);
-    m_message.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_message.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
 
     auto textRect = m_message.getLocalBounds();
     m_message.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
@@ -27,7 +27,7 @@ BaseState(stateManager), m_confetti(sf::Quads) {
     m_message_background.setOrigin(m_message_background.getSize() / 2.f);
     m_message_background.setPosition(sf::Vector2f(window_size / 2u));
 
-    m_confetti_generators_pos.emplace_back((float) window_size.x, (float) window_size.y);
+    m_confetti_generators_pos.emplace_back((float) window_size.x / 3, (float) window_size.y);
     m_confetti_generators_pos.emplace_back((float) window_size.x * 2 / 3, (float) window_size.y);
 }
 

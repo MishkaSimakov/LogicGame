@@ -95,8 +95,6 @@ void LevelsLoader::setLevelPassed(int level_id) {
         level = level->NextSiblingElement();
     }
 
-    std::cout << level_id << " " << level->Attribute("passed") << std::endl;
-
     level->SetAttribute("passed", true);
     m_levels_file.SaveFile(m_levels_filename);
 }

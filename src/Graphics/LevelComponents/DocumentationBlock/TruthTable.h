@@ -4,6 +4,7 @@
 
 #include "Level.h"
 #include "ResourceHolder.h"
+#include "Constants/Paths.h"
 
 #include <string>
 #include <utility>

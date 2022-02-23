@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "RoundedRectangle.h"
 #include "ResourceHolder.h"
+#include "Constants/Paths.h"
 
 #include <string>
 #include <array>
@@ -74,6 +75,10 @@ public:
         return m_position;
     }
 
+    void setTextureOffset(float offset);
+
+    void setTextureOffset(float offset_x, float offset_y);
+
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
@@ -90,6 +95,7 @@ private:
     SharedContext *m_shared_context;
 
     const sf::Texture *m_texture{nullptr};
+    sf::Vector2f m_texture_offset{0, 0};
 
     std::wstring m_string;
     sf::Vector2f m_position;

@@ -3,7 +3,7 @@
 
 SimulationManager::SimulationManager(SharedContext *sharedContext) :
         m_shared_context(sharedContext),
-        m_simulation_connectors_manager(sharedContext->m_level_manager->getCurrentLevel(), &m_connectors) {
+        m_simulation_connectors_manager(sharedContext->m_level_manager->getCurrentLevel(), &m_connectors, sharedContext) {
     sf::View simulation_view;
     simulation_view.setSize((sf::Vector2f) m_shared_context->m_wind->getWindowSize());
     simulation_view.setCenter((sf::Vector2f) m_shared_context->m_wind->getWindowSize() / 2.f);
@@ -198,10 +198,16 @@ void SimulationManager::releaseComponent() {
 }
 
 void SimulationManager::releaseWire() {
+    if (!m_dragged_wire) return;
+
     m_dragged_wire_point_id = -1;
     m_dragged_wire_drag_origin_segment_id = -1;
 
-    if (!m_dragged_wire) return;
+    if (!m_dragged_wire->isUnconnected()) {
+        m_dragged_wire = nullptr;
+
+        return;
+    }
 
     // check whether wire under component
     auto mouse_pos{getMousePosition()};
@@ -301,6 +307,8 @@ void SimulationManager::grabWire(WireShape *wire) {
 
     m_dragged_wire = wire;
     m_drag_origin = getMousePosition();
+
+    m_dragged_wire_point_id = m_dragged_wire->getWaypointByPosition(getMousePosition());
 
     m_dragged_wire_drag_origin_segment_id = (long) m_dragged_wire->getSegmentIdByPosition(getMousePosition());
 

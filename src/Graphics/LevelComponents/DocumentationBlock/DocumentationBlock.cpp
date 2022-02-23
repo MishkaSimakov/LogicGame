@@ -11,7 +11,7 @@ DocumentationBlock::DocumentationBlock(
                 layout.documentation_block.getSize(), layout.border_radius,
                 RoundedRectangle::BOTTOM_RIGHT | RoundedRectangle::TOP_RIGHT
         ),
-        m_title(level.getTitle(), ResourceHolder::get().fonts.get("arial"),
+        m_title(level.getTitle(), ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename),
                 layout.documentation_block_title.getFontSize()),
         m_documentation(layout.documentation_block.width, level, layout.documentation_block_description),
         m_description_scroll_box(sharedContext, StateType::Level, &m_documentation),
@@ -27,11 +27,11 @@ DocumentationBlock::DocumentationBlock(
 
     m_show_btn.setVisible(false);
     m_show_btn.setOnClickCallback(&DocumentationBlock::show, this);
-    m_show_btn.setTexture(&ResourceHolder::get().textures.get("icons/menu_2"));
+    m_show_btn.setTexture(&ResourceHolder::get().textures.get(Constants::Paths::documentation_icon_filename));
     m_show_btn.setPosition({m_layout.offset.x * 2 + 40, m_layout.offset.y});
 
     m_hide_btn.setOnClickCallback(&DocumentationBlock::hide, this);
-    m_hide_btn.setTexture(&ResourceHolder::get().textures.get("icons/X_simple_2"));
+    m_hide_btn.setTexture(&ResourceHolder::get().textures.get(Constants::Paths::close_icon_filename));
 
     m_description_scroll_box.setMaxHeight(
             (float) m_shared_context->m_wind->getWindowSize().y - layout.offset.y * 2 - m_title.getGlobalBounds().height

@@ -3,6 +3,7 @@
 
 #include "BaseState.h"
 #include "RoundedRectangle.h"
+#include "Constants/Paths.h"
 
 #include <SFML/Graphics.hpp>
 

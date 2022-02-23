@@ -2,6 +2,7 @@
 #define LOGICGAMEENGINE_LEVELSLOADER_H
 
 #include "Level.h"
+#include "Constants/Paths.h"
 
 #include <string>
 #include <tinyxml2.h>
@@ -41,7 +42,7 @@ protected:
     static void loadTests(tinyxml2::XMLElement *levelElement, Level *levelData);
 
     std::vector<Level> m_levels;
-    const char *m_levels_filename{"resources/levels/levels.xml"};
+    const char *m_levels_filename{Constants::Paths::levels_filename};
     tinyxml2::XMLDocument m_levels_file;
 };
 

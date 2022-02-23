@@ -12,12 +12,12 @@ LevelResultState::LevelResultState(StateManager *stateManager) :
 
     m_position = ((sf::Vector2f) m_stateManager->getContext()->m_wind->getWindowSize() - m_size) / 2.f;
 
-    m_message.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_message.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_message.setPosition(m_position + m_offset);
     m_message.setCharacterSize(30);
     m_message.setFillColor(sf::Color::Black);
 
-    m_submessage.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_submessage.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_submessage.setCharacterSize(25);
     m_submessage.setFillColor(sf::Color(0, 0, 0, 100));
 
@@ -31,7 +31,7 @@ LevelResultState::LevelResultState(StateManager *stateManager) :
 
     m_message.setPosition(m_position + m_offset);
     m_message.setCharacterSize(30);
-    m_message.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_message.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_message.setFillColor(sf::Color::Black);
 
     m_close_btn.setVisible(false);
@@ -63,12 +63,21 @@ void LevelResultState::onDestroy() {
 void LevelResultState::activate() {
     LevelManager *levelManager = m_stateManager->getContext()->m_level_manager;
 
-    m_message.setString(m_result_messages[levelManager->getResult()]);
+    if (levelManager->getCurrentLevel()->getTests().empty()) {
+        m_message.setString(L"Это было лишь обучение");
 
-    m_submessage.setString(
-            L"Вы прошли " + std::to_wstring(levelManager->getPassedTestsCount()) +
-            L" из " + std::to_wstring(levelManager->getCurrentLevel()->getTests().size()) + L" тестов"
-    );
+        m_submessage.setString(
+               L"На этом уровне нет тестов"
+        );
+    } else {
+        m_message.setString(m_result_messages[levelManager->getResult()]);
+
+        m_submessage.setString(
+                L"Вы прошли " + std::to_wstring(levelManager->getPassedTestsCount()) +
+                L" из " + std::to_wstring(levelManager->getCurrentLevel()->getTests().size()) + L" тестов"
+        );
+    }
+
     m_submessage.setPosition(
             {
                     m_position.x + m_offset.x,

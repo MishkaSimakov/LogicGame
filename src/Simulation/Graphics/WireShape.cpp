@@ -16,6 +16,7 @@ void WireShape::update() {
 
     m_segments.clear();
     m_outline_segments.clear();
+    m_waypoint_circles.clear();
 
     for (auto &waypoint: m_waypoints) {
         // updating corners position
@@ -23,6 +24,11 @@ void WireShape::update() {
         appendSegment(last_point, waypoint, m_outline_width + m_width, &m_outline_segments, outline_color);
 
         last_point = waypoint;
+
+        m_waypoint_circles.emplace_back(10);
+        m_waypoint_circles.back().setFillColor(wire_color);
+        m_waypoint_circles.back().setOrigin(10, 10);
+        m_waypoint_circles.back().setPosition(waypoint);
     }
 
     appendSegment(last_point, m_end, m_width, &m_segments, wire_color);
@@ -32,6 +38,10 @@ void WireShape::update() {
 void WireShape::draw(Window *window) {
     if (m_is_selected) window->draw(m_outline_segments);
     window->draw(m_segments);
+
+    for (auto &circle: m_waypoint_circles) {
+        window->draw(circle);
+    }
 }
 
 void WireShape::dragTo(const sf::Vector2f &position) {
@@ -103,15 +113,57 @@ bool WireShape::isPointInTriangle(
 }
 
 size_t WireShape::getSegmentIdByPosition(const sf::Vector2f &position) {
-    return 0;
+//    std::cout << m_outline_segments.getVertexCount() << std::endl;
+
+    for (int i = 0; i < m_outline_segments.getVertexCount() - 2; ++i) {
+        if (isPointInTriangle(
+                position,
+                m_outline_segments[i].position,
+                m_outline_segments[i + 1].position,
+                m_outline_segments[i + 2].position
+        )) {
+//            std::cout << i / 2 << std::endl;
+            return i / 4;
+        }
+    }
+
+    return -1;
 }
 
 size_t WireShape::addWaypoint(const sf::Vector2f &position, size_t segment_id) {
-    return 0;
+    m_waypoints.insert(m_waypoints.begin() + (long) segment_id, position);
+
+    return segment_id;
 }
 
 void WireShape::dragWaypoint(size_t waypoint_id, const sf::Vector2f &position) {
+    sf::Vector2f prev_waypoint_pos;
+    sf::Vector2f next_waypoint_pos;
 
+    if (waypoint_id == 0)
+        prev_waypoint_pos = m_start_connector->getPosition();
+    else
+        prev_waypoint_pos = m_waypoints[waypoint_id - 1];
+
+    if (waypoint_id == m_waypoints.size() - 1)
+        next_waypoint_pos = m_end_connector->getPosition();
+    else
+        next_waypoint_pos = m_waypoints[waypoint_id + 1];
+
+
+    m_waypoints[waypoint_id] = position;
+
+    if (abs(position.x - prev_waypoint_pos.x) < 10)
+        m_waypoints[waypoint_id].x = prev_waypoint_pos.x;
+    else if (abs(position.x - next_waypoint_pos.x) < 10)
+        m_waypoints[waypoint_id].x = next_waypoint_pos.x;
+
+    if (abs(position.y - prev_waypoint_pos.y) < 10)
+        m_waypoints[waypoint_id].y = prev_waypoint_pos.y;
+    else if (abs(position.y - next_waypoint_pos.y) < 10)
+        m_waypoints[waypoint_id].y = next_waypoint_pos.y;
+
+    update();
 }
 
 bool WireShape::needToRemoveWaypoint(size_t waypoint_id) {
@@ -129,11 +181,27 @@ bool WireShape::needToRemoveWaypoint(size_t waypoint_id) {
     else
         next_waypoint_pos = m_waypoints[waypoint_id + 1];
 
-    if (abs((waypoint_pos.x - prev_waypoint_pos.x) / (waypoint_pos.y - prev_waypoint_pos.y) - (next_waypoint_pos.x - waypoint_pos.x) / (next_waypoint_pos.y - waypoint_pos.x))) {
-
-    }
+    // is slope1 == slope2
+    return abs(
+            (waypoint_pos.x - prev_waypoint_pos.x) / (waypoint_pos.y - prev_waypoint_pos.y)
+            - (next_waypoint_pos.x - waypoint_pos.x) / (next_waypoint_pos.y - waypoint_pos.y)
+    ) < 0.1;
 }
 
 void WireShape::removeWaypoint(size_t waypoint_id) {
     m_waypoints.erase(m_waypoints.begin() + (long) waypoint_id);
+
+    update();
+}
+
+long WireShape::getWaypointByPosition(const sf::Vector2f &position) const {
+    for (int waypoint_id = 0; waypoint_id < m_waypoints.size(); ++waypoint_id) {
+        if (m_waypoint_circles[waypoint_id].getGlobalBounds().contains(position)) return waypoint_id;
+    }
+
+    return -1;
+}
+
+ConnectorShape *WireShape::getEndConnector() const {
+    return m_end_connector;
 }

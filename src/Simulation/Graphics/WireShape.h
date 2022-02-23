@@ -23,13 +23,11 @@ public:
         m_end_connector = end_connector;
     }
 
-    ConnectorShape *getStartConnector() const {
+    [[nodiscard]] ConnectorShape *getStartConnector() const {
         return m_start_connector;
     }
 
-    ConnectorShape *getEndConnector() const {
-        return m_end_connector;
-    }
+    [[nodiscard]] ConnectorShape *getEndConnector() const;
 
     // Эта функция в случае, когда кабель перемещают, возвращает коннектор из которого его тянут
     ConnectorShape *getDragOriginConnector();
@@ -55,6 +53,8 @@ public:
     [[nodiscard]] bool isUnconnected() const {
         return !m_start_connector || !m_end_connector;
     }
+
+    [[nodiscard]] long getWaypointByPosition(const sf::Vector2f &position) const;
 
     [[nodiscard]] size_t getSegmentIdByPosition(const sf::Vector2f &position);
 
@@ -96,6 +96,7 @@ protected:
 
     sf::VertexArray m_segments;
     sf::VertexArray m_outline_segments;
+    std::vector<sf::CircleShape> m_waypoint_circles;
 };
 
 

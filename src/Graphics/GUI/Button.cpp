@@ -23,7 +23,7 @@ Button::Button(
     m_state_styles[(int) State::HOVER] = hover_style;
     m_state_styles[(int) State::ACTIVE] = active_style;
 
-    m_label.setFont(ResourceHolder::get().fonts.get("arial"));
+    m_label.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
 
     update();
 }
@@ -110,8 +110,8 @@ void Button::update() {
         m_sprite.setTexture(*m_texture);
         m_sprite.setPosition(m_position);
 
-        float scale_factor = std::min(m_size.x / (float) m_texture->getSize().x,
-                                      m_size.y / (float) m_texture->getSize().y);
+        float scale_factor = std::min((m_size.x - 2 * m_texture_offset.x) / (float) m_texture->getSize().x,
+                                      (m_size.y - 2 * m_texture_offset.y) / (float) m_texture->getSize().y);
         m_sprite.setScale(scale_factor, scale_factor);
 
         auto spriteRect = m_sprite.getLocalBounds();
@@ -162,4 +162,14 @@ bool Button::contains(const sf::Vector2f &position) {
     sf::FloatRect rect{m_position - offset, m_size + offset};
 
     return rect.contains(position);
+}
+
+void Button::setTextureOffset(float offset) {
+    setTextureOffset(offset, offset);
+}
+
+void Button::setTextureOffset(float offset_x, float offset_y) {
+    m_texture_offset = sf::Vector2f(offset_x, offset_y);
+
+    update();
 }

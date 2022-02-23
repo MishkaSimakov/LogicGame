@@ -3,8 +3,12 @@
 
 SimulationConnectorsManager::SimulationConnectorsManager(
         const Level *level,
-        std::vector<std::unique_ptr<Connector>> *connectors_storage
-) : m_inputs_count(level->getInputsCount()), m_outputs_count(level->getOutputsCount()) {
+        std::vector<std::unique_ptr<Connector>> *connectors_storage,
+        SharedContext *shared_context
+) :
+        m_inputs_count((int) level->getInputsCount()),
+        m_outputs_count((int) level->getOutputsCount()),
+        m_shared_context(shared_context) {
     connectors_storage->reserve(m_inputs_count + m_outputs_count);
 
     m_outputs.reserve(m_outputs_count);
@@ -15,7 +19,7 @@ SimulationConnectorsManager::SimulationConnectorsManager(
         connector->getShape()->setLabel(level->getOutputs()[i]);
         m_outputs.push_back(connector.get());
 
-        connector->getShape()->setPosition({900.f + (float) i * 100.f, 100.f});
+        connector->getShape()->setPosition({getConnectorX(i, m_outputs_count),100.f});
     }
 
     m_inputs.reserve(m_inputs_count);
@@ -26,7 +30,7 @@ SimulationConnectorsManager::SimulationConnectorsManager(
         connector->getShape()->setLabel(level->getInputs()[i]);
         m_inputs.push_back(connector.get());
 
-        connector->getShape()->setPosition({900.f + (float) i * 100.f, 700.f});
+        connector->getShape()->setPosition({getConnectorX(i, m_inputs_count), 700.f});
     }
 }
 
@@ -51,4 +55,9 @@ bool SimulationConnectorsManager::checkTest(const std::vector<bool> &test) {
     }
 
     return true;
+}
+
+float SimulationConnectorsManager::getConnectorX(int id, int total_count) {
+    return ((float) m_shared_context->m_wind->getWindowSize().x + 800 - 100.f * (float) (total_count - 1)) / 2
+           + 100.f * (float) id;
 }

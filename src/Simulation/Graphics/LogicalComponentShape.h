@@ -3,6 +3,8 @@
 
 #include "Window.h"
 #include "RoundedRectangle.h"
+#include "Constants/Paths.h"
+#include "ResourceHolder.h"
 
 #include <SFML/Graphics.hpp>
 
