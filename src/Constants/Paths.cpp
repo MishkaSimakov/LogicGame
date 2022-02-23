@@ -1,7 +1,7 @@
 #include "Paths.h"
 
 const char *Constants::Paths::levels_filename{"levels.xml"};
-const char *Constants::Paths::levels_hostname{"http://logics.games/api/leveles"};
+const char *Constants::Paths::levels_hostname{"http://logics.games/api/level"};
 
 const char *Constants::Paths::home_icon_filename{"icons/home_2_1"};
 const char *Constants::Paths::documentation_icon_filename{"icons/menu_2"};

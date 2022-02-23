@@ -9,9 +9,9 @@ void ConnectorShape::update() {
     m_shape.setRadius(radius);
 
     if (*m_value_link) {
-        m_shape.setFillColor(sf::Color(182, 37, 25));
+        m_shape.setFillColor(Constants::Colors::active_connection_color);
     } else {
-        m_shape.setFillColor(sf::Color(158, 158, 158));
+        m_shape.setFillColor(Constants::Colors::inactive_connection_color);
     }
 
     m_shape.setPosition(m_position);
@@ -20,7 +20,7 @@ void ConnectorShape::update() {
         wire->update();
     }
 
-    m_label_shape.setFillColor(Colors::TEXT_FILL_COLOR);
+    m_label_shape.setFillColor(Constants::Colors::main_font_color);
     m_label_shape.setString(m_label);
     m_label_shape.setFont(ResourceHolder::get().fonts.get(Constants::Paths::main_font_filename));
     m_label_shape.setCharacterSize(20);

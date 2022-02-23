@@ -7,8 +7,8 @@ StaticComponentsBlock::StaticComponentsBlock(
 ) :
         m_position(position), m_size(size), m_shared_context(sharedContext) {
     m_background.setCornerRadius(18.f);
-    m_background.setFillColor(sf::Color(220, 220, 220));
-    m_background.setOutlineColor(sf::Color(240, 240, 240));
+    m_background.setFillColor(Constants::Colors::static_components_block_background_color);
+    m_background.setOutlineColor(Constants::Colors::static_components_block_outline_color);
     m_background.setOutlineThickness(1);
 
     m_background.setSize(m_size);

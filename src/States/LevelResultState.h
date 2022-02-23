@@ -9,6 +9,7 @@
 #include "Window.h"
 #include "LevelManager.h"
 #include "Constants/Paths.h"
+#include "Constants/Colors.h"
 
 #include <string>
 #include <unordered_map>

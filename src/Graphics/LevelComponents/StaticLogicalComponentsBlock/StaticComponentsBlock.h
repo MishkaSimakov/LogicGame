@@ -6,6 +6,7 @@
 #include "BaseLogicalComponent.h"
 #include "StaticLogicalComponent.h"
 #include "RoundedRectangle.h"
+#include "Constants/Colors.h"
 
 #include <SFML/Graphics.hpp>
 #include <vector>

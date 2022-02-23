@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Colors.h"
 #include "Constants/Paths.h"
+#include "Constants/Colors.h"
 
 #include <map>
 #include <SFML/Graphics.hpp>
