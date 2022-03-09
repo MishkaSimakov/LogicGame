@@ -5,7 +5,10 @@
 namespace Constants {
     class Paths {
     public:
+        static const char *executable_directory;
+
         static const char *levels_filename;
+        static const char *levels_file_path;
         static const char *levels_hostname;
 
         static const char *home_icon_filename;

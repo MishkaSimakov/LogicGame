@@ -51,7 +51,6 @@ sf::Vector2f LogicalComponentShape::getConnectorPosition(
                sf::Vector2f(m_size.x / (float) (connectors_count + 1) * (float) (connector_no + 1), m_size.y);
     }
 
-    // TODO: add other types of placement
     return m_position;
 }
 

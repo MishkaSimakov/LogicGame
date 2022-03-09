@@ -1,6 +1,8 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
+#include "Constants/Paths.h"
+
 #include <string>
 #include <unordered_map>
 #include <iostream>
@@ -9,7 +11,7 @@ template<typename Resource>
 class ResourceManager {
 public:
     ResourceManager(const std::string &folder, const std::string &extention) :
-            m_folder("resources/" + folder + "/"), m_extention("." + extention) {}
+            m_folder(std::string(Constants::Paths::executable_directory) + "resources/" + folder + "/"), m_extention("." + extention) {}
 
     const Resource &get(const std::string &name) {
         if (!exists(name)) {

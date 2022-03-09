@@ -41,7 +41,8 @@ LevelChooseState::LevelChooseState(StateManager *stateManager) :
             m_level_btns.back()->setString(std::to_wstring(i + 1));
         } else {
             m_level_btns.back()->setEnabled(false);
-            m_level_btns.back()->setTexture(&ResourceHolder::get().textures.get(Constants::Paths::locked_icon_filename));
+            m_level_btns.back()->setTexture(
+                    &ResourceHolder::get().textures.get(Constants::Paths::locked_icon_filename));
             m_level_btns.back()->setTextureOffset(15);
         }
 
@@ -63,19 +64,32 @@ void LevelChooseState::onDestroy() {
 }
 
 void LevelChooseState::activate() {
-    m_quit_level_choose_btn.setVisible(true);
+    std::cout << "here" << std::endl;
 
-    for (auto &btn: m_level_btns) {
-        btn->setVisible(true);
+    std::cout << m_stateManager->getContext()->m_level_manager->isLevelUnlocked(2) << std::endl;
+    std::cout << m_stateManager->getContext()->m_level_manager->getLevels()[1].isPassed() << std::endl;
+
+    // necessary if levels were changed
+    for (int i = 0; i < m_level_count; ++i) {
+        if (m_stateManager->getContext()->m_level_manager->isLevelUnlocked(i)) {
+            m_level_btns[i]->setEnabled(true);
+
+            m_level_btns[i]->setOnClickCallback([this, i]() {
+                choose(i);
+            });
+            m_level_btns[i]->setString(std::to_wstring(i + 1));
+            m_level_btns[i]->setTexture(nullptr);
+        } else {
+            m_level_btns[i]->setEnabled(false);
+            m_level_btns[i]->setTexture(
+                    &ResourceHolder::get().textures.get(Constants::Paths::locked_icon_filename));
+            m_level_btns[i]->setTextureOffset(15);
+        }
     }
 }
 
 void LevelChooseState::deactivate() {
-    m_quit_level_choose_btn.setVisible(false);
 
-    for (auto &btn: m_level_btns) {
-        btn->setVisible(false);
-    }
 }
 
 void LevelChooseState::update(const sf::Time &time) {

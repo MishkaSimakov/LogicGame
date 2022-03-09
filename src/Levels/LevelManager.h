@@ -72,6 +72,11 @@ public:
 
     void loadLevels() {
         m_levels_loader.getLevels(); // levels will be loaded when first getLevels called
+
+        for (auto &level: getLevels()) {
+            if (level.isPassed()) m_current_level_id++;
+            else break;
+        }
     }
 
     bool checkLevels() {

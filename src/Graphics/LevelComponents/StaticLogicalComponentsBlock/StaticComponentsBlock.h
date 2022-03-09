@@ -28,8 +28,6 @@ public:
     std::optional<std::pair<const BaseLogicalComponent *, const sf::Vector2f &>>
     getClickedComponentData(const sf::Vector2f &position);
 
-    inline sf::Vector2f getNextComponentPosition();
-
     inline sf::Vector2f getComponentPosition(int n);
 
     void setPosition(const sf::Vector2f &position);
@@ -39,6 +37,8 @@ public:
     const sf::Vector2f &getSize() const;
 
 private:
+    inline sf::Vector2f getNextComponentPosition();
+
     void update();
 
     sf::Vector2f m_position;
@@ -51,6 +51,8 @@ private:
     float m_space_between{10.f};
 
     SharedContext *m_shared_context;
+
+    sf::View m_view;
 };
 
 

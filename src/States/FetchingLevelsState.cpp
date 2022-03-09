@@ -13,7 +13,7 @@ void FetchingLevelsState::onCreate() {
     auto level_manager = m_stateManager->getContext()->m_level_manager;
 
     if (!m_remote_content.empty()) {
-        m_remote_levels_file.Parse(&(m_remote_content[0]));
+        m_remote_levels_file.Parse(m_remote_content.c_str());
 
         auto levels_filename = level_manager->getLevelsFilename();
 

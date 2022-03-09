@@ -54,6 +54,8 @@ public:
 
     void setPosition(const sf::Vector2f &position);
 
+    void setPosition(float x, float y);
+
     void setVisible(bool is_visible);
 
     void setEnabled(bool is_enabled);

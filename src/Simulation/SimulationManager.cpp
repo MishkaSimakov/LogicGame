@@ -295,8 +295,9 @@ bool SimulationManager::runSimulationTest(const std::vector<bool> &test_inputs, 
     m_simulation_connectors_manager.setValues(test_inputs);
 
     startSimulation();
+    int counter = 0;
 
-    while (m_simulation_running)
+    while (m_simulation_running && counter++ < 1000)
         doSimulationStep();
 
     return m_simulation_connectors_manager.checkTest(test_outputs);

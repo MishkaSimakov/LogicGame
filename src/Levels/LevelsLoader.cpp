@@ -97,6 +97,8 @@ void LevelsLoader::setLevelPassed(int level_id) {
 
     level->SetAttribute("passed", true);
     m_levels_file.SaveFile(m_levels_filename);
+
+    m_levels[level_id].setPassed(true);
 }
 
 void LevelsLoader::loadAllowedComponents(tinyxml2::XMLElement *levelElement, Level *levelData) {

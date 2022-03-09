@@ -35,6 +35,8 @@ protected:
     Button m_start_game_btn;
     Button m_choose_level_btn;
     Button m_quit_game_btn;
+
+    sf::Text m_game_title;
 };
 
 

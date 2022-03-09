@@ -65,7 +65,6 @@ public:
 protected:
     Connector *m_connector;
 
-    // TODO: make this static
     std::map<ConnectorType, float> m_radius{
             {ConnectorType::INPUT,             10.f},
             {ConnectorType::OUTPUT,            10.f},

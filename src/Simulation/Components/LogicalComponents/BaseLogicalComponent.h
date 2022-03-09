@@ -8,8 +8,8 @@
 
 class BaseLogicalComponent {
 public:
-    BaseLogicalComponent(std::wstring name, int inputs_count, int outputs_count) :
-        m_name(std::move(name)), m_inputs_count(inputs_count), m_outputs_count(outputs_count) {}
+    BaseLogicalComponent(std::wstring name, int inputs_count, int outputs_count, const sf::Vector2f &size = {100, 100}) :
+        m_name(std::move(name)), m_inputs_count(inputs_count), m_outputs_count(outputs_count), m_size(size) {}
 
     virtual ~BaseLogicalComponent() = default;
 
@@ -35,7 +35,7 @@ private:
     const std::wstring m_name;
     const int m_inputs_count;
     const int m_outputs_count;
-    const sf::Vector2f m_size {100, 100};
+    const sf::Vector2f m_size;
 };
 
 

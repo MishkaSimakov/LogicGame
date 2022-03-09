@@ -11,18 +11,19 @@ StaticComponentsBlock::StaticComponentsBlock(
     m_background.setOutlineColor(Constants::Colors::static_components_block_outline_color);
     m_background.setOutlineThickness(1);
 
-    m_background.setSize(m_size);
-    m_background.setPosition(m_position);
-
     update();
 }
 
 void StaticComponentsBlock::draw() {
     m_shared_context->m_wind->draw(m_background);
 
+    m_shared_context->m_wind->setWindowView(m_view);
+
     for (auto &component: m_components) {
         component->getShape()->draw(m_shared_context->m_wind);
     }
+
+    m_shared_context->m_wind->setWindowView(Window::ViewType::DEFAULT);
 }
 
 void StaticComponentsBlock::clearStaticComponents() {
@@ -85,6 +86,17 @@ void StaticComponentsBlock::setSize(const sf::Vector2f &size) {
 void StaticComponentsBlock::update() {
     m_background.setSize(m_size);
     m_background.setPosition(m_position);
+
+    m_view.setCenter(m_position + m_size / 2.f);
+    m_view.setSize(m_size);
+    m_view.setViewport(
+            {
+                    m_position.x / (float) m_shared_context->m_wind->getWindowSize().x,
+                    m_position.y / (float) m_shared_context->m_wind->getWindowSize().y,
+                    (m_size.x - m_offset.x) / (float) m_shared_context->m_wind->getWindowSize().x,
+                    m_size.y / (float) m_shared_context->m_wind->getWindowSize().y
+            }
+    );
 
     for (int i = 0; i < m_components.size(); ++i) {
         m_components[i]->getShape()->setPosition(getComponentPosition(i));

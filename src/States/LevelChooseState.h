@@ -34,7 +34,7 @@ protected:
 
     std::vector<std::unique_ptr<Button>> m_level_btns;
 
-    sf::Vector2f m_quit_level_choose_btn_size{50, 50};
+    sf::Vector2f m_quit_level_choose_btn_size{40, 40};
     Button m_quit_level_choose_btn;
 
     int m_max_levels_count_x{8};

@@ -38,6 +38,10 @@ void Button::setPosition(const sf::Vector2f &position) {
     update();
 }
 
+void Button::setPosition(float x, float y) {
+    setPosition({x, y});
+}
+
 void Button::handleMouseMove(const sf::Event &event) {
     if (!m_is_visible) return;
 

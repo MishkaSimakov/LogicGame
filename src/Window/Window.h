@@ -3,8 +3,9 @@
 
 #include "Events/EventManager.h"
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 
 class Window {
 public:
