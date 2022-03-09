@@ -3,6 +3,7 @@
 
 #include "BaseState.h"
 #include "Constants/Paths.h"
+#include "Exceptions/NoLevelsFileException.h"
 
 #include <curl/curl.h>
 #include <tinyxml2.h>
@@ -26,10 +27,17 @@ public:
     void draw() override;
 
 protected:
-    void fetchLevelsFromServer();
+    void loadAndFetchLevels();
+
+    void loadRemoteLevelsFile();
+
+    [[nodiscard]] bool parseRemoteLevelsFile();
+
+    void mergeLevelPassedAttributes();
+
+    void saveRemoteLevelsToLocalFile();
 
     std::string m_remote_content;
-    std::string m_server_url {Constants::Paths::levels_hostname};
 
     tinyxml2::XMLDocument m_local_levels_file;
     tinyxml2::XMLDocument m_remote_levels_file;

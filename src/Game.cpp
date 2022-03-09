@@ -1,6 +1,8 @@
 #include "Game.h"
 
-Game::Game() : m_window("Logic Game X", sf::Vector2u(1920, 1080)), m_state_manager(&m_context) {
+Game::Game() :
+        m_window("Logic Game X", sf::Vector2u(1920, 1080)),
+        m_state_manager(&m_context) {
     m_context.m_wind = &m_window;
     m_context.m_eventManager = m_window.getEventManager();
     m_context.m_level_manager = &m_level_manager;
@@ -16,6 +18,7 @@ Window *Game::getWindow() {
 
 void Game::update() {
     m_window.update(); // Update window events.
+
     m_state_manager.update(m_elapsed);
 }
 
